@@ -7,6 +7,8 @@ allowed-tools: Read, Glob, Grep, Bash, Write, Task, mcp__atlassian__jira_create_
 
 ## Brain Context
 Read ~/brain/.claude/PREAMBLE.md now. Follow all directives within it.
+Read ~/brain/knowledge/domain/jobs-to-be-done.md — used in Step 1.5.
+Read ~/brain/knowledge/domain/user-story-best-practices.md — used for INVEST check and splitting.
 - Current date: !`date +%Y-%m-%d`
 - ISO week: !`date +%G-W%V`
 
@@ -24,6 +26,24 @@ If $ARGUMENTS contains a feature description, use it. If empty, ask:
 Also ask (if not clear from input):
 - "Which service does this relate to? (task-assignment-service / wfm-microfrontends / rx-os-frontend / rx-os-backend)"
 - "Do you have an epic key to link this to? (e.g. WFM-1234)"
+
+### Step 1.5: JTBD Framing
+
+Before writing the story, clarify the job. Ask:
+
+> "What job is the user hiring this feature to do?
+> - Functional job: What specific task are they trying to complete? (verb + object + context)
+> - Emotional job: How do they want to feel when it works? What feeling do they want to avoid?"
+
+From the answer, write:
+```
+Functional job: [verb + object + context — solution-agnostic]
+Emotional job: [state to achieve / avoid]
+```
+
+This becomes the "so that" clause of the story. A story without a grounded job statement is a task, not a story.
+
+Reference: `~/brain/knowledge/domain/jobs-to-be-done.md`
 
 ### Step 2: Brain context lookup
 
@@ -46,11 +66,11 @@ mcp__atlassian__jira_search JQL: project = WFM AND issuetype = Story AND text ~ 
 ### Step 3: Codebase context (if service is known)
 
 Read the relevant service's CLAUDE.md for technical constraints:
-- `~/Documents/your-company/<service>/CLAUDE.md`
+- `~/Documents/blinkhealth/<service>/CLAUDE.md`
 
 Do a quick grep to understand if any related code already exists:
 ```bash
-grep -r "<key_feature_term>" ~/Documents/your-company/<service>/ --include="*.py" --include="*.ts" -l 2>/dev/null | head -5
+grep -r "<key_feature_term>" ~/Documents/blinkhealth/<service>/ --include="*.py" --include="*.ts" -l 2>/dev/null | head -5
 ```
 
 ### Step 4: Draft the story
@@ -108,6 +128,51 @@ Given [initial context], when [user action], then [expected result]:
 **Priority:** Ask if not clear: "What priority should this be? (High / Medium / Low)"
 
 **Labels:** Service label(s) based on affected codebase.
+
+### Step 4.5: INVEST Validation
+
+Run the INVEST check before finalizing. Flag any criterion that fails.
+
+| Criterion | Check | Pass? |
+|---|---|---|
+| **Independent** | Can this be built without waiting for another unfinished story? | |
+| **Negotiable** | Is the solution open, or only the outcome locked? | |
+| **Valuable** | Does this deliver value to a user or business by itself? | |
+| **Estimable** | Can engineering estimate it without more unknowns? | |
+| **Small** | Can it be completed in one sprint? | |
+| **Testable** | Do the ACs allow a QA engineer to write a test without asking questions? | |
+
+If **Small** fails (estimate ≥ 8 points): offer to split the story. Apply Lawrence's 9 patterns in order:
+1. Workflow steps (thin end-to-end slice)
+2. Operations (CRUD — separate Create/Read/Update/Delete)
+3. Business rule variations
+4. Data variations
+5. Data entry methods (simple UI first)
+6. Major effort (core + remaining)
+7. Simple/complex
+8. Defer performance
+9. Spike (last resort — only if there's genuine technical unknowns)
+
+Reference: `~/brain/knowledge/domain/user-story-best-practices.md`
+
+### Step 4.6: Epic Hypothesis (for new epics only)
+
+If this story is defining a brand new epic (not a child of an existing one), write an epic hypothesis before creating:
+
+```
+Epic Hypothesis:
+If we [specific action for this epic] for [target persona]
+Then we will [measurable outcome]
+
+We will test this assumption by:
+- [Smallest experiment — prototype / concierge / A/B test]
+
+We know it's valid if within [2-4 weeks] we observe:
+- [Quantitative signal]
+- [Qualitative signal]
+```
+
+Ask: "Should I save this as an epic hypothesis in brain.db before creating the story?"
 
 ### Step 5: Confirm before creating
 

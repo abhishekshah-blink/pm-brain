@@ -20,14 +20,14 @@ updated: {today}
 
 | Ticket | Title | PR |
 |---|---|---|
-| [WFM-XXXX](https://your-workspace.atlassian.net/browse/WFM-XXXX) | {summary} | #{pr_num} |
+| [WFM-XXXX](https://blinkhealth.atlassian.net/browse/WFM-XXXX) | {summary} | #{pr_num} |
 
 ## What's In Flight
 <!-- Tickets currently in progress and their status -->
 
 | Ticket | Title | Status | Notes |
 |---|---|---|---|
-| [WFM-XXXX](https://your-workspace.atlassian.net/browse/WFM-XXXX) | {summary} | In Progress | {any blockers or context} |
+| [WFM-XXXX](https://blinkhealth.atlassian.net/browse/WFM-XXXX) | {summary} | In Progress | {any blockers or context} |
 
 ## Blockers & Friction
 <!-- What slowed you down this week? What needs resolution? -->

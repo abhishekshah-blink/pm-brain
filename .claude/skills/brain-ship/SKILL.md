@@ -31,7 +31,7 @@ If changes exist on `main` or `master` branch directly: warn "You are on the mai
 
 ### Step 2: Identify project and load rules
 
-From `pwd`, determine the project. Read `~/Documents/your-company/{project}/CLAUDE.md` for the correct test command, lint command, and any ship requirements.
+From `pwd`, determine the project. Read `~/Documents/blinkhealth/{project}/CLAUDE.md` for the correct test command, lint command, and any ship requirements.
 
 Default commands by project:
 - **task-assignment-service:** `poetry run pytest --tb=short .` / lint: `poetry run black --check .`
@@ -106,7 +106,7 @@ PR body template:
 
 ## Jira Ticket
 {KEY}: {ticket summary}
-{Jira ticket URL: https://your-workspace.atlassian.net/browse/{KEY}}
+{Jira ticket URL: https://blinkhealth.atlassian.net/browse/{KEY}}
 
 ## Test Plan
 - [ ] Unit tests pass (`poetry run pytest --tb=short .` or `npm test`)

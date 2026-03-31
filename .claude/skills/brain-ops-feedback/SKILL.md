@@ -41,7 +41,7 @@ Determine which codebase(s) are involved:
 
 Search the identified service for relevant code:
 ```bash
-grep -r "<key_term>" ~/Documents/your-company/<service>/ --include="*.py" --include="*.ts" --include="*.tsx" -l 2>/dev/null | head -10
+grep -r "<key_term>" ~/Documents/blinkhealth/<service>/ --include="*.py" --include="*.ts" --include="*.tsx" -l 2>/dev/null | head -10
 ```
 
 Read 1-2 relevant files to understand the current implementation well enough to:

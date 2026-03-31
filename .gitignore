@@ -1,6 +1,9 @@
-# Personal knowledge — never commit
+# Personal knowledge — never commit (Jira snapshots, Confluence pages, PRDs, meeting notes)
 knowledge/**
 !knowledge/**/.gitkeep
+# PM framework domain knowledge is reusable reference — commit it
+!knowledge/domain/
+!knowledge/domain/**
 inbox/**
 !inbox/.gitkeep
 

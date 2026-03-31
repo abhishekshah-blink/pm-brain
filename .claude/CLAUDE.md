@@ -4,20 +4,20 @@
 
 ## Identity
 
-- **Name:** [Your Name]
-- **Role:** Product Manager, [Your Team], [Your Company]
-- **Jira workspace:** your-workspace.atlassian.net
-- **GitHub org:** github.com/your-org
+- **Name:** Abhishek Shah
+- **Role:** Product Manager (PM-first; engineering work is secondary context), Workforce Management (WFM) team, Blinkhealth
+- **Jira workspace:** blinkhealth.atlassian.net
+- **GitHub org:** github.com/blinkhealth
 - **Active projects:** task-assignment-service, rx-os-backend, rx-os-frontend, wfm-microfrontends, ui-tools
-- **Project root:** ~/Documents/your-company/
+- **Project root:** ~/Documents/blinkhealth/
 
 ## What This System Is
 
 ~/brain/ is a Personal Knowledge Accelerator — a second brain that combines:
 1. **Knowledge management** (PKA-style): raw inputs → structured markdown → SQLite index
-2. **Dev workflow skills** (gstack-style): slash commands that check the brain before any dev work
+2. **PM + dev workflow skills** (gstack-style): slash commands that check the brain before any product or dev work
 
-The result: every planning, review, ship, investigate, and retro action is informed by accumulated product context, Jira state, Confluence docs, and past decisions.
+The result: every planning, discovery, prioritization, PRD, story, review, ship, investigate, and retro action is informed by accumulated product context, PM frameworks, Jira state, Confluence docs, and past decisions.
 
 ## Knowledge Base
 
@@ -82,7 +82,11 @@ stakeholders: []       # optional: [name]
 
 | Skill | Trigger phrases |
 |---|---|
+| `/brain-discovery` | "run discovery on X", "help me frame the problem", "do discovery for WFM-1234", "I don't want to jump to a solution" |
+| `/brain-prioritize` | "help me prioritize", "which framework should I use", "prioritize my backlog", "score these features", "what should we build first" |
 | `/brain-plan` | "plan a feature", "write a PRD", "break down a ticket", "design X" |
+| `/brain-prd` | "write a PRD", "one-pager for X", "product spec", "requirements doc" |
+| `/brain-user-story` | "write a user story", "create a story", "create a ticket for X" |
 | `/brain-review` | "review my code", "check my changes", "review before commit" |
 | `/brain-ship` | "ship this", "commit and push", "create a PR", "deploy to review" |
 | `/brain-investigate` | "debug this", "root cause this", "investigate WFM-1234", "why is X failing" |
@@ -91,10 +95,26 @@ stakeholders: []       # optional: [name]
 | `/brain-ops-feedback` | "ops feedback", "ops wants X", "feature request from ops", paste ops Slack |
 | `/brain-ops-bug` | "ops bug", "ops reported X is broken", paste ops Slack describing broken behavior |
 | `/brain-weekly-email` | "write the weekly email", "weekly status", "draft email for VP", "Friday email" |
-| `/brain-user-story` | "write a user story", "create a story", "create a ticket for X" |
-| `/brain-prd` | "write a PRD", "one-pager for X", "product spec", "requirements doc" |
 
-**Skills always check the brain before starting dev work.** They query SQLite for relevant context, then load only the matching markdown files — keeping context window usage efficient.
+**Skills always check the brain before starting product or dev work.** They query SQLite for relevant context, then load only the matching markdown files — keeping context window usage efficient.
+
+## PM Frameworks Reference
+
+PM best practices are stored as domain knowledge and auto-surfaced by skills. Key files:
+
+| File | Contents |
+|---|---|
+| `knowledge/domain/pm-frameworks-overview.md` | When-to-use index for all PM frameworks |
+| `knowledge/domain/opportunity-solution-tree.md` | Teresa Torres OST — used by brain-discovery, brain-plan |
+| `knowledge/domain/jobs-to-be-done.md` | JTBD framework — used by brain-discovery, brain-user-story |
+| `knowledge/domain/problem-framing.md` | MITRE canvas + problem statement — used by brain-discovery, brain-plan, brain-prd |
+| `knowledge/domain/user-story-best-practices.md` | Story anatomy, INVEST, 9 splitting patterns, epic hypothesis |
+| `knowledge/domain/prioritization-frameworks.md` | RICE, ICE, Kano, MoSCoW, Cost of Delay — used by brain-prioritize |
+| `knowledge/domain/product-strategy-frameworks.md` | Geoffrey Moore positioning, Working Backwards, Lean UX Canvas |
+| `knowledge/domain/customer-discovery-frameworks.md` | Proto-persona, CJM, Mom Test interviews |
+| `knowledge/domain/feature-investment-framework.md` | Build/don't-build ROI framework — used by brain-prioritize |
+
+**Rule:** Before starting any product work, check the relevant domain knowledge file. These are the standing best practices for the PM role.
 
 ## SQLite Query Patterns
 

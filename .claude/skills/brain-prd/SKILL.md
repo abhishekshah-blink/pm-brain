@@ -7,6 +7,9 @@ allowed-tools: Read, Glob, Grep, Bash, Write, Task, mcp__atlassian__jira_get_iss
 
 ## Brain Context
 Read ~/brain/.claude/PREAMBLE.md now. Follow all directives within it.
+Read ~/brain/knowledge/domain/problem-framing.md — used in Step 1.5.
+Read ~/brain/knowledge/domain/customer-discovery-frameworks.md — used in Step 1.6.
+Read ~/brain/knowledge/domain/product-strategy-frameworks.md — used in Working Backwards stress-test.
 - Current date: !`date +%Y-%m-%d`
 - ISO week: !`date +%G-W%V`
 
@@ -27,6 +30,39 @@ Also ask: "What format? (One-pager for small feature / Full PRD for major initia
 |---|---|
 | **One-pager** | Small feature, internal tool improvement, single-team scope |
 | **Full PRD** | New product capability, multi-team, significant user impact |
+
+### Step 1.5: Problem Statement Gate
+
+Before loading context, lock in the problem. Ask:
+
+> "Before drafting, let's confirm we're solving the right problem:
+> 1. What is the user struggling to do right now? (Observable behavior — not a solution)
+> 2. What is the root cause? (Ask 'why' at least twice — don't stop at the symptom)
+> 3. What is the consequence when this problem occurs? (For the user, and for the business)"
+
+From these answers, write one sentence:
+> **"[Persona] needs a way to [desired outcome] because [root cause], which currently [emotional/practical impact]."**
+
+Show this to the user and confirm before proceeding. A PRD without a confirmed problem statement will drift.
+
+If the user says discovery hasn't been done yet, suggest running `/brain-discovery` first.
+
+### Step 1.6: Proto-Persona
+
+Identify the primary persona. Check brain first:
+```bash
+sqlite3 ~/brain/data/brain.db "SELECT title, file_path, summary FROM knowledge_items WHERE category IN ('stakeholders', 'domain') AND (tags LIKE '%persona%' OR title LIKE '%persona%' OR title LIKE '%ops agent%' OR title LIKE '%pharmacy manager%') LIMIT 3;" 2>/dev/null
+```
+
+If no existing persona, draft quickly:
+```
+Persona: [alliterative name — e.g., "Ops Agent Olivia"]
+Role: [specific WFM role and team]
+Primary job: [functional outcome they're trying to achieve]
+Key pain: [the specific barrier this PRD addresses]
+Success feels like: [emotional state when this works]
+[ASSUMPTION — validate with 3 user interviews]
+```
 
 ### Step 2: Load all available context
 
@@ -50,7 +86,7 @@ ORDER BY updated_at DESC LIMIT 8;
 
 **From codebase** (understand technical context):
 ```bash
-grep -r "<key_term>" ~/Documents/your-company/ --include="*.py" --include="*.ts" -l 2>/dev/null | head -5
+grep -r "<key_term>" ~/Documents/blinkhealth/ --include="*.py" --include="*.ts" -l 2>/dev/null | head -5
 ```
 
 ### Step 3: Write the document
@@ -62,7 +98,7 @@ grep -r "<key_term>" ~/Documents/your-company/ --include="*.py" --include="*.ts"
 ```markdown
 # One-Pager: {Feature Name}
 
-**Author:** [Your Name] | **Date:** {today} | **Status:** Draft
+**Author:** Abhishek Shah | **Date:** {today} | **Status:** Draft
 **Jira Epic:** {KEY or TBD} | **Target:** {sprint or quarter}
 
 ## TL;DR
@@ -97,7 +133,7 @@ grep -r "<key_term>" ~/Documents/your-company/ --include="*.py" --include="*.ts"
 ```markdown
 # PRD: {Feature Name}
 
-**Author:** [Your Name] | **Date:** {today} | **Status:** Draft
+**Author:** Abhishek Shah | **Date:** {today} | **Status:** Draft
 **Jira Epic:** {KEY or TBD} | **Target:** {sprint or quarter}
 **Stakeholders:** {names from knowledge/stakeholders/ — PM, Eng Lead, Design, Ops}
 
@@ -111,9 +147,9 @@ grep -r "<key_term>" ~/Documents/your-company/ --include="*.py" --include="*.ts"
 Include: user quotes, ops feedback, error rates, frequency if known.}
 
 ## Goals
-- **Primary:** {The one thing this must achieve}
+- **Primary:** {The one thing this must achieve — measurable}
 - **Secondary:** {Nice to have outcomes}
-- **Non-goals:** {What we're explicitly NOT trying to do}
+- **Non-goals (Won't Have this cycle):** {What we're explicitly NOT trying to do — be specific. "We will not..." format}
 
 ## Users & Personas
 | Persona | Role | Primary Need |
@@ -151,9 +187,21 @@ Based on codebase investigation.}
 **Estimated complexity:** {S / M / L / XL}
 
 ## Success Metrics
-| Metric | Baseline | Target | Measurement |
-|---|---|---|---|
-| {Metric 1} | {current} | {goal} | {how to measure} |
+| Metric | Type | Baseline | Target | Measurement |
+|---|---|---|---|---|
+| {Metric 1 — leading indicator} | Leading | {current} | {goal} | {how to measure — leading indicators change within weeks} |
+| {Metric 2 — lagging indicator} | Lagging | {current} | {goal} | {how to measure — lagging indicators change over months} |
+
+*Leading indicators* (signal early): task assignment rate, session frequency, feature adoption rate
+*Lagging indicators* (confirm later): error rate reduction, SLA compliance, ops throughput
+
+## Working Backwards Stress-Test (Full PRD only)
+Before finalizing, answer these 5 questions. If you can't answer them confidently, the PRD needs more work:
+1. Would an ops agent or pharmacy manager recognize themselves in this document?
+2. Is the problem statement specific enough that a new team member would understand why it matters?
+3. Are the success metrics measurable without ambiguity?
+4. Is the document free of internal jargon a non-Blinkhealth person couldn't understand?
+5. Does this pass the "so what?" test — would someone reading cold care about this?
 
 ## Rollout Plan
 - **Phase 1:** {What ships first}

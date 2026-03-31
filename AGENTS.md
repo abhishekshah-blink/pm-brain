@@ -5,7 +5,7 @@
 
 ## What This Is
 
-~/brain/ is [Your Name]'s Personal Knowledge Accelerator — a second brain for a PM who builds at Blinkhealth. It combines:
+~/brain/ is Abhishek Shah's Personal Knowledge Accelerator — a second brain for a PM who builds at Blinkhealth. It combines:
 - **Knowledge management:** raw inputs (Jira, Confluence, PDFs, meeting notes) → structured markdown → SQLite index
 - **Dev workflow skills:** slash commands for planning, reviewing, shipping, debugging, and retrospectives
 

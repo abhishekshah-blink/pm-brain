@@ -13,7 +13,7 @@ Read ~/brain/.claude/PREAMBLE.md now. Follow all directives within it.
 ## Dynamic Context (collected at skill start)
 
 Git activity across all Blinkhealth repos this week:
-!`for d in ~/Documents/your-company/*/; do if git -C "$d" rev-parse --git-dir &>/dev/null 2>&1; then git -C "$d" log --oneline --since="7 days ago" --author="$(git config user.name 2>/dev/null || echo 'Abhishek')" 2>/dev/null | sed "s|^|[$(basename $d)] |"; fi; done`
+!`for d in ~/Documents/blinkhealth/*/; do if git -C "$d" rev-parse --git-dir &>/dev/null 2>&1; then git -C "$d" log --oneline --since="7 days ago" --author="$(git config user.name 2>/dev/null || echo 'Abhishek')" 2>/dev/null | sed "s|^|[$(basename $d)] |"; fi; done`
 
 New knowledge items indexed this week:
 !`sqlite3 ~/brain/data/brain.db "SELECT title, category FROM knowledge_items WHERE indexed_at >= date('now', '-7 days') ORDER BY indexed_at DESC;" 2>/dev/null || echo "(brain.db not accessible)"`

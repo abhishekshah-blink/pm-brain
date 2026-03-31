@@ -47,6 +47,12 @@ When asked to process the inbox:
    - 1:1 coaching session notes, leadership feedback, growth areas → `coaching-sessions`
    - Quarterly/annual roadmap, operating plan, capacity planning → `operating-plans`
    - Meeting notes or journal without clear categorization → `decisions` or `scratch`
+   - Contains "discovery", "problem framing", "OST", "opportunity", "JTBD", "jobs to be done", "HMW", "how might we" → `features` (discovery phase)
+   - Contains "positioning statement", "press release", "working backwards", "product strategy", "go-to-market" → `decisions`
+   - Contains "persona", "proto-persona", "customer journey map", "CJM", "user archetype" → `features` or `decisions` based on whether it's tied to a specific feature
+   - Contains "RICE score", "ICE score", "Kano", "prioritization", "MoSCoW", "backlog ranking", "feature scoring" → `decisions`
+   - Contains "lean UX canvas", "epic hypothesis", "if we build", "experiment plan", "validation plan" → `features`
+   - Contains "OKR", "key result", "quarterly objective", "annual plan", "roadmap horizon" → `operating-plans`
    - Anything with < 70% confidence → `scratch`
 
 4. **For files with ≥ 70% confidence:** Spawn Keeper as a subagent via Task tool with:

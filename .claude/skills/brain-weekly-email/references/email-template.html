@@ -1,14 +1,232 @@
-<!--
-  Add your company's weekly status email HTML template here.
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        h2 { border-bottom: 2px solid #ddd; padding-bottom: 5px; }
+        ul { margin: 10px 0; }
+        li { margin: 5px 0; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f9f9f9; font-weight: bold; }
+        .template-note { color: #666; font-style: italic; background: #f5f5f5; padding: 10px; margin: 10px 0; border-left: 4px solid #ddd; }
+    </style>
+</head>
+<body>
+    <div class="template-note">
+        <strong>TEMPLATE USAGE INSTRUCTIONS:</strong><br>
+        - Replace all [PLACEHOLDER] items with actual content<br>
+        - Remove template-note divs before sending<br>
+        - Update date in subject line<br>
+        - Fill in JIRA data from active sprint<br>
+        - Include actual ticket links and assignees
+    </div>
 
-  The /brain-weekly-email skill reads this file and fills in the placeholders
-  with live Jira data. Your template should include sections for:
+    <p>Hi All,</p>
+    <p>Here are the updates from this week:</p>
 
-    1. Key Decisions (Made or In-Flight)
-    2. Blockers and Plan to Resolve
-    3. What shipped this week (completed tickets table)
-    4. What's coming next week (in-progress tickets table)
+    <h2>1. Key Decisions (Made or In-Flight)</h2>
+    
+    <div class="template-note">
+        <strong>Section 1 Instructions:</strong> Only include if provided. If not, ask: "Do you want to highlight any key decisions made or under discussion?"
+    </div>
+    
+    <ul>
+        <li><strong>Decision: [DECISION_TITLE_1]</strong><br>
+        – Context: [2-3 sentence explanation of what was decided, why, and what it enables or changes]</li>
+        
+        <li><strong>Decision: [DECISION_TITLE_2]</strong><br>
+        – Context: [2-3 sentence explanation of what was decided, why, and what it enables or changes]</li>
+        
+        <li><strong>Decision: [DECISION_TITLE_3]</strong><br>
+        – Context: [2-3 sentence explanation of what was decided, why, and what it enables or changes]</li>
+    </ul>
 
-  Use [PLACEHOLDER] tokens where the skill should inject content.
-  See the skill's SKILL.md for the exact sections it expects to populate.
--->
+    <h2>2. Blockers and Plan to Resolve</h2>
+    
+    <div class="template-note">
+        <strong>Section 2 Instructions:</strong> Only include if provided. If not, ask: "Any blockers to share this week? Please include root cause, impact, and resolution plan."
+    </div>
+    
+    <ul>
+        <li><strong>Blocker: [BLOCKER_TITLE]</strong><br>
+        – Impact: [What's affected? Who's blocked?]<br>
+        – Root Cause: [If known]<br>
+        – Plan: [How and when we expect to resolve it]</li>
+    </ul>
+
+    <h2>3. How did our user experience improve this week?</h2>
+    
+    <div class="template-note">
+        <strong>Section 3 Instructions:</strong> 
+        - Start with 3-5 line summary paragraph highlighting broad themes
+        - Use bulleted format for key improvements
+        - Follow with detailed table of completed tickets
+        - Include actual JIRA links and assignee names
+    </div>
+    
+    <p>[SUMMARY_PARAGRAPH: 3-5 lines summarizing how user experience improved this week based on features released. Highlight broad themes like automation gains, cleanup improvements, fixes for key user pain points. Quantify value where applicable.]</p>
+    
+    <ul>
+        <li><strong>[UX_IMPROVEMENT_1]</strong></li>
+        <li><strong>[UX_IMPROVEMENT_2]</strong></li>
+        <li><strong>[UX_IMPROVEMENT_3]</strong></li>
+        <li><strong>[UX_IMPROVEMENT_4]</strong></li>
+        <li><strong>[UX_IMPROVEMENT_5]</strong></li>
+    </ul>
+
+    <table>
+        <tr>
+            <th>Overview</th>
+            <th>JIRA</th>
+            <th>Comments</th>
+            <th>Assignee</th>
+            <th>Story Points</th>
+        </tr>
+        <tr>
+            <td><strong>[TICKET_TITLE_1]</strong> - [2-3 sentences explaining context and fix]</td>
+            <td><a href="[JIRA_LINK_1]">[JIRA_KEY_1]</a></td>
+            <td>[TICKET_COMMENTS_1]</td>
+            <td>[ASSIGNEE_1]</td>
+            <td>[STORY_POINTS_1]</td>
+        </tr>
+        <tr>
+            <td><strong>[TICKET_TITLE_2]</strong> - [2-3 sentences explaining context and fix]</td>
+            <td><a href="[JIRA_LINK_2]">[JIRA_KEY_2]</a></td>
+            <td>[TICKET_COMMENTS_2]</td>
+            <td>[ASSIGNEE_2]</td>
+            <td>[STORY_POINTS_2]</td>
+        </tr>
+        <tr>
+            <td><strong>[TICKET_TITLE_3]</strong> - [2-3 sentences explaining context and fix]</td>
+            <td><a href="[JIRA_LINK_3]">[JIRA_KEY_3]</a></td>
+            <td>[TICKET_COMMENTS_3]</td>
+            <td>[ASSIGNEE_3]</td>
+            <td>[STORY_POINTS_3]</td>
+        </tr>
+        <tr>
+            <td><strong>[TICKET_TITLE_4]</strong> - [2-3 sentences explaining context and fix]</td>
+            <td><a href="[JIRA_LINK_4]">[JIRA_KEY_4]</a></td>
+            <td>[TICKET_COMMENTS_4]</td>
+            <td>[ASSIGNEE_4]</td>
+            <td>[STORY_POINTS_4]</td>
+        </tr>
+        <tr>
+            <td><strong>[TICKET_TITLE_5]</strong> - [2-3 sentences explaining context and fix]</td>
+            <td><a href="[JIRA_LINK_5]">[JIRA_KEY_5]</a></td>
+            <td>[TICKET_COMMENTS_5]</td>
+            <td>[ASSIGNEE_5]</td>
+            <td>[STORY_POINTS_5]</td>
+        </tr>
+        <tr>
+            <td><strong>[TICKET_TITLE_6]</strong> - [2-3 sentences explaining context and fix]</td>
+            <td><a href="[JIRA_LINK_6]">[JIRA_KEY_6]</a></td>
+            <td>[TICKET_COMMENTS_6]</td>
+            <td>[ASSIGNEE_6]</td>
+            <td>[STORY_POINTS_6]</td>
+        </tr>
+    </table>
+
+    <h2>4. How will the user experience improve next week?</h2>
+    
+    <div class="template-note">
+        <strong>Section 4 Instructions:</strong>
+        - Provide brief overview paragraph of what's expected to go live
+        - Always return in bulleted format
+        - Include table with upcoming tickets (Ready for Release + In Progress)
+    </div>
+    
+    <p>[NEXT_WEEK_SUMMARY: Brief overview paragraph outlining what is expected to go live in the coming week(s) and how it will improve UX.]</p>
+    
+    <ul>
+        <li><strong>[UPCOMING_UX_IMPROVEMENT_1]</strong></li>
+        <li><strong>[UPCOMING_UX_IMPROVEMENT_2]</strong></li>
+        <li><strong>[UPCOMING_UX_IMPROVEMENT_3]</strong></li>
+        <li><strong>[UPCOMING_UX_IMPROVEMENT_4]</strong></li>
+        <li><strong>[UPCOMING_UX_IMPROVEMENT_5]</strong></li>
+    </ul>
+
+    <table>
+        <tr>
+            <th>Overview</th>
+            <th>JIRA</th>
+            <th>Status</th>
+            <th>Assignee</th>
+            <th>Story Points</th>
+        </tr>
+        <tr>
+            <td><strong>[UPCOMING_TICKET_TITLE_1]</strong> - [2-3 sentences explaining expected impact]</td>
+            <td><a href="[UPCOMING_JIRA_LINK_1]">[UPCOMING_JIRA_KEY_1]</a></td>
+            <td>[STATUS_1]</td>
+            <td>[UPCOMING_ASSIGNEE_1]</td>
+            <td>[STORY_POINTS_1]</td>
+        </tr>
+        <tr>
+            <td><strong>[UPCOMING_TICKET_TITLE_2]</strong> - [2-3 sentences explaining expected impact]</td>
+            <td><a href="[UPCOMING_JIRA_LINK_2]">[UPCOMING_JIRA_KEY_2]</a></td>
+            <td>[STATUS_2]</td>
+            <td>[UPCOMING_ASSIGNEE_2]</td>
+            <td>[STORY_POINTS_2]</td>
+        </tr>
+        <tr>
+            <td><strong>[UPCOMING_TICKET_TITLE_3]</strong> - [2-3 sentences explaining expected impact]</td>
+            <td><a href="[UPCOMING_JIRA_LINK_3]">[UPCOMING_JIRA_KEY_3]</a></td>
+            <td>[STATUS_3]</td>
+            <td>[UPCOMING_ASSIGNEE_3]</td>
+            <td>[STORY_POINTS_3]</td>
+        </tr>
+        <tr>
+            <td><strong>[UPCOMING_TICKET_TITLE_4]</strong> - [2-3 sentences explaining expected impact]</td>
+            <td><a href="[UPCOMING_JIRA_LINK_4]">[UPCOMING_JIRA_KEY_4]</a></td>
+            <td>[STATUS_4]</td>
+            <td>[UPCOMING_ASSIGNEE_4]</td>
+            <td>[STORY_POINTS_4]</td>
+        </tr>
+        <tr>
+            <td><strong>[UPCOMING_TICKET_TITLE_5]</strong> - [2-3 sentences explaining expected impact]</td>
+            <td><a href="[UPCOMING_JIRA_LINK_5]">[UPCOMING_JIRA_KEY_5]</a></td>
+            <td>[STATUS_5]</td>
+            <td>[UPCOMING_ASSIGNEE_5]</td>
+            <td>[STORY_POINTS_5]</td>
+        </tr>
+        <tr>
+            <td><strong>[UPCOMING_TICKET_TITLE_6]</strong> - [2-3 sentences explaining expected impact]</td>
+            <td><a href="[UPCOMING_JIRA_LINK_6]">[UPCOMING_JIRA_KEY_6]</a></td>
+            <td>[STATUS_6]</td>
+            <td>[UPCOMING_ASSIGNEE_6]</td>
+            <td>[STORY_POINTS_6]</td>
+        </tr>
+        <tr>
+            <td><strong>[UPCOMING_TICKET_TITLE_7]</strong> - [2-3 sentences explaining expected impact]</td>
+            <td><a href="[UPCOMING_JIRA_LINK_7]">[UPCOMING_JIRA_KEY_7]</a></td>
+            <td>[STATUS_7]</td>
+            <td>[UPCOMING_ASSIGNEE_7]</td>
+            <td>[STORY_POINTS_7]</td>
+        </tr>
+        <tr>
+            <td><strong>[UPCOMING_TICKET_TITLE_8]</strong> - [2-3 sentences explaining expected impact]</td>
+            <td><a href="[UPCOMING_JIRA_LINK_8]">[UPCOMING_JIRA_KEY_8]</a></td>
+            <td>[STATUS_8]</td>
+            <td>[UPCOMING_ASSIGNEE_8]</td>
+            <td>[STORY_POINTS_8]</td>
+        </tr>
+        <tr>
+            <td><strong>[UPCOMING_TICKET_TITLE_9]</strong> - [2-3 sentences explaining expected impact]</td>
+            <td><a href="[UPCOMING_JIRA_LINK_9]">[UPCOMING_JIRA_KEY_9]</a></td>
+            <td>[STATUS_9]</td>
+            <td>[UPCOMING_ASSIGNEE_9]</td>
+            <td>[STORY_POINTS_9]</td>
+        </tr>
+    </table>
+
+    <p>Best regards,<br>[TEAM_NAME]</p>
+
+    <div class="template-note">
+        <strong>EMAIL PARAMETERS FOR SEND FUNCTION:</strong><br>
+        - <strong>Subject:</strong> "Weekly Status Update – Week Ending [DATE]"<br>
+        - <strong>recipient_email:</strong> ["recipient@email.com"]<br>
+        - <strong>body:</strong> [Plain text version without HTML tags]<br>
+        - <strong>html_body:</strong> [This HTML content with placeholders filled]
+    </div>
+</body>
+</html> 

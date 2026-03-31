@@ -66,10 +66,10 @@ Identify the most likely affected service from context. Search the codebase:
 
 ```bash
 # Find the error message in code
-grep -r "{error_string}" ~/Documents/your-company/ --include="*.py" --include="*.ts" --include="*.tsx" -l 2>/dev/null | head -10
+grep -r "{error_string}" ~/Documents/blinkhealth/ --include="*.py" --include="*.ts" --include="*.tsx" -l 2>/dev/null | head -10
 
 # Find related functions
-grep -r "{relevant_function_name}" ~/Documents/your-company/ --include="*.py" -n 2>/dev/null | head -20
+grep -r "{relevant_function_name}" ~/Documents/blinkhealth/ --include="*.py" -n 2>/dev/null | head -20
 ```
 
 Read the relevant files — trace the call stack from the symptom back toward the root cause. Look for:

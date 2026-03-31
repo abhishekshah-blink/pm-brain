@@ -61,14 +61,14 @@ Also search Jira for similar past bugs:
 
 Search for the error message or affected code path:
 ```bash
-grep -r "<error_string_or_key_term>" ~/Documents/your-company/<service>/ \
+grep -r "<error_string_or_key_term>" ~/Documents/blinkhealth/<service>/ \
   --include="*.py" --include="*.ts" --include="*.tsx" -n 2>/dev/null | head -20
 ```
 
 Read relevant files. Look for:
 - The code path that handles this workflow
 - Any error handling that would produce this symptom
-- Recent git changes to this area: `git -C ~/Documents/your-company/<service>/ log --oneline -10 -- <relevant_file>`
+- Recent git changes to this area: `git -C ~/Documents/blinkhealth/<service>/ log --oneline -10 -- <relevant_file>`
 
 Load the debug patterns reference:
 Read `~/brain/.claude/skills/brain-investigate/references/debug-patterns.md` for Blinkhealth-specific patterns that match this bug type.

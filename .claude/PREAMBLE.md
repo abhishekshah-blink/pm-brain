@@ -7,7 +7,7 @@
 Before starting any skill workflow:
 1. Read `~/brain/.claude/CLAUDE.md` for: user identity, active Blinkhealth projects, knowledge taxonomy, SQLite query patterns, and available MCP tools.
 2. Note the current date and working directory from the dynamic context at the top of the skill.
-3. If operating inside a Blinkhealth project (`~/Documents/your-company/*/`), read that project's `CLAUDE.md` for project-specific conventions.
+3. If operating inside a Blinkhealth project (`~/Documents/blinkhealth/*/`), read that project's `CLAUDE.md` for project-specific conventions.
 
 ---
 

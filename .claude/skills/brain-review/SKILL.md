@@ -30,7 +30,7 @@ If not in a known project, note it and proceed with general best practices.
 
 ### Step 2: Load project CLAUDE.md
 
-Read `~/Documents/your-company/{project}/CLAUDE.md` for project-specific rules, patterns, and anti-patterns.
+Read `~/Documents/blinkhealth/{project}/CLAUDE.md` for project-specific rules, patterns, and anti-patterns.
 
 If the project has its own review checklist or test conventions, note them — they take precedence over the general blink-checklist.
 
