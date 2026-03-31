@@ -13,25 +13,30 @@
 
 | Agent | Role |
 |---|---|
-| **Roni** | Orchestrator. Processes inbox, classifies files, delegates to Nova and Spark. Entry point for batch operations. |
-| **Nova** | Knowledge librarian. Writes and indexes knowledge items. Answers lookup queries from skills. |
-| **Spark** | MCP sync agent. Pulls Jira tickets, Confluence pages, and GitHub PRs into ~/brain/knowledge/. |
+| **Sorter** | Orchestrator. Processes inbox, classifies files, delegates to Keeper and Scout. Entry point for batch operations. |
+| **Keeper** | Knowledge librarian. Writes and indexes knowledge items. Answers lookup queries from skills. |
+| **Scout** | MCP sync agent. Pulls Jira tickets, Confluence pages, and GitHub PRs into ~/brain/knowledge/. |
 
 ## Skills (slash commands)
 
 | Skill | Purpose |
 |---|---|
+| `/brain-discovery` | Problem framing and customer discovery |
 | `/brain-plan` | Plan a feature using brain context + live Jira/Confluence |
+| `/brain-prd` | Write a PRD or one-pager |
+| `/brain-user-story` | Create a Jira user story |
 | `/brain-review` | Code review with project rules + ticket acceptance criteria |
 | `/brain-ship` | Full pipeline: test → lint → review → commit → push → PR → Jira |
 | `/brain-investigate` | Root cause analysis with oncall history and knowledge base |
-| `/brain-retro` | Weekly retro from git + Jira sprint + brain knowledge items |
 | `/brain-sync` | Pull Jira/Confluence/GitHub into knowledge base via MCP |
+| `/brain-ops-feedback` | Ops Slack feedback → structured Jira story |
+| `/brain-ops-bug` | Ops Slack bug report → Jira bug ticket |
+| `/brain-weekly-email` | Compile Friday VP status email |
 
 ## Knowledge Base
 
 - Root: ~/brain/knowledge/
-- Categories: prd, decisions, stakeholders, jira, confluence, features, retros, domain, oncall, daily-journals, business-reviews, ai-strategy, coaching-sessions, operating-plans, scratch
+- Categories: prd, decisions, stakeholders, jira, confluence, features, domain, oncall, scratch
 - SQLite index: ~/brain/data/brain.db
 - Inbox: ~/brain/inbox/
 

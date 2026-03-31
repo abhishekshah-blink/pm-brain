@@ -17,7 +17,7 @@
 1. **Knowledge management** (PKA-style): raw inputs → structured markdown → SQLite index
 2. **PM + dev workflow skills** (gstack-style): slash commands that check the brain before any product or dev work
 
-The result: every planning, discovery, prioritization, PRD, story, review, ship, investigate, and retro action is informed by accumulated product context, PM frameworks, Jira state, Confluence docs, and past decisions.
+The result: every planning, discovery, PRD, story, review, ship, and investigate action is informed by accumulated product context, PM frameworks, Jira state, Confluence docs, and past decisions.
 
 ## Knowledge Base
 
@@ -35,14 +35,8 @@ The result: every planning, discovery, prioritization, PRD, story, review, ship,
 | `jira` | knowledge/jira/ | Ticket snapshots synced by Scout — filename: `{KEY}.md` (e.g. WFM-1234.md) |
 | `confluence` | knowledge/confluence/ | Page snapshots synced by Scout — filename: `{page_id}.md` |
 | `features` | knowledge/features/ | Feature briefs at various stages: discovery → design → dev → shipped |
-| `retros` | knowledge/retros/ | Weekly retro outputs — filename: `YYYY-WW.md` |
 | `domain` | knowledge/domain/ | WFM/pharmacy domain knowledge, SLA concepts, business glossary |
 | `oncall` | knowledge/oncall/ | Incident postmortems, runbooks, alert context |
-| `daily-journals` | knowledge/daily-journals/ | Daily meeting notes, standups, key decisions and action items from the day |
-| `business-reviews` | knowledge/business-reviews/ | Weekly/monthly business reviews, OKR updates, metrics summaries |
-| `ai-strategy` | knowledge/ai-strategy/ | AI adoption plans, agentic architecture decisions, AI tooling evaluations |
-| `coaching-sessions` | knowledge/coaching-sessions/ | 1:1 coaching notes, leadership feedback, growth areas |
-| `operating-plans` | knowledge/operating-plans/ | Quarterly/annual operating plans, roadmaps, team capacity plans |
 | `scratch` | knowledge/scratch/ | Unclassified/working notes; reclassify later with Sorter |
 
 ### Naming Conventions
@@ -51,14 +45,13 @@ The result: every planning, discovery, prioritization, PRD, story, review, ship,
 - Reference/evergreen content: `<slug>.md` (e.g. `task-assignment-sla.md`)
 - Jira tickets: `{KEY}.md` (e.g. `WFM-1234.md`)
 - Confluence pages: `{page_id}.md` (e.g. `123456789.md`)
-- Retros: `YYYY-WW.md` (e.g. `2026-W13.md`)
 
 ### Required Frontmatter (every knowledge item)
 
 ```yaml
 ---
 title: <title>
-category: prd|decisions|stakeholders|jira|confluence|features|retros|domain|oncall|daily-journals|business-reviews|ai-strategy|coaching-sessions|operating-plans|scratch
+category: prd|decisions|stakeholders|jira|confluence|features|domain|oncall|scratch
 tags: [tag1, tag2]
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
@@ -83,14 +76,12 @@ stakeholders: []       # optional: [name]
 | Skill | Trigger phrases |
 |---|---|
 | `/brain-discovery` | "run discovery on X", "help me frame the problem", "do discovery for WFM-1234", "I don't want to jump to a solution" |
-| `/brain-prioritize` | "help me prioritize", "which framework should I use", "prioritize my backlog", "score these features", "what should we build first" |
 | `/brain-plan` | "plan a feature", "write a PRD", "break down a ticket", "design X" |
 | `/brain-prd` | "write a PRD", "one-pager for X", "product spec", "requirements doc" |
 | `/brain-user-story` | "write a user story", "create a story", "create a ticket for X" |
 | `/brain-review` | "review my code", "check my changes", "review before commit" |
 | `/brain-ship` | "ship this", "commit and push", "create a PR", "deploy to review" |
 | `/brain-investigate` | "debug this", "root cause this", "investigate WFM-1234", "why is X failing" |
-| `/brain-retro` | "run a retro", "weekly retro", "summarize my week" |
 | `/brain-sync` | "sync Jira", "pull my tickets", "sync sprint", "sync WFM-1234" |
 | `/brain-ops-feedback` | "ops feedback", "ops wants X", "feature request from ops", paste ops Slack |
 | `/brain-ops-bug` | "ops bug", "ops reported X is broken", paste ops Slack describing broken behavior |
@@ -109,10 +100,10 @@ PM best practices are stored as domain knowledge and auto-surfaced by skills. Ke
 | `knowledge/domain/jobs-to-be-done.md` | JTBD framework — used by brain-discovery, brain-user-story |
 | `knowledge/domain/problem-framing.md` | MITRE canvas + problem statement — used by brain-discovery, brain-plan, brain-prd |
 | `knowledge/domain/user-story-best-practices.md` | Story anatomy, INVEST, 9 splitting patterns, epic hypothesis |
-| `knowledge/domain/prioritization-frameworks.md` | RICE, ICE, Kano, MoSCoW, Cost of Delay — used by brain-prioritize |
+| `knowledge/domain/prioritization-frameworks.md` | RICE, ICE, Kano, MoSCoW, Cost of Delay |
 | `knowledge/domain/product-strategy-frameworks.md` | Geoffrey Moore positioning, Working Backwards, Lean UX Canvas |
 | `knowledge/domain/customer-discovery-frameworks.md` | Proto-persona, CJM, Mom Test interviews |
-| `knowledge/domain/feature-investment-framework.md` | Build/don't-build ROI framework — used by brain-prioritize |
+| `knowledge/domain/feature-investment-framework.md` | Build/don't-build ROI framework |
 
 **Rule:** Before starting any product work, check the relevant domain knowledge file. These are the standing best practices for the PM role.
 
@@ -134,11 +125,6 @@ sqlite3 ~/brain/data/brain.db "SELECT name, role, team, file_path FROM stakehold
 # Check what was indexed this week:
 sqlite3 ~/brain/data/brain.db "SELECT title, category FROM knowledge_items WHERE indexed_at >= date('now', '-7 days') ORDER BY indexed_at DESC;"
 
-# List 1:1s for a stakeholder:
-sqlite3 ~/brain/data/brain.db "SELECT o.date, o.summary, o.action_items FROM one_on_ones o JOIN stakeholders s ON o.stakeholder_id = s.id WHERE s.name LIKE '%<name>%' ORDER BY o.date DESC;"
-
-# List daily journal entries this week:
-sqlite3 ~/brain/data/brain.db "SELECT date, summary FROM daily_summaries WHERE date >= date('now', '-7 days') ORDER BY date DESC;"
 ```
 
 ## MCP Tools Available
@@ -166,5 +152,4 @@ sqlite3 ~/brain/data/brain.db "SELECT date, summary FROM daily_summaries WHERE d
 2. **Every knowledge item must have YAML frontmatter** with at minimum: title, category, tags, created, updated.
 3. **Jira tickets → knowledge/jira/{KEY}.md. Confluence pages → knowledge/confluence/{page_id}.md.**
 4. **Skills always check the brain before starting dev or product work.** Query SQLite first; read only matching files.
-5. **Retros are written weekly** to knowledge/retros/YYYY-WW.md.
-6. **When classification is uncertain (< 70% confidence), use scratch/.** Sorter will reclassify on request.
+5. **When classification is uncertain (< 70% confidence), use scratch/.** Sorter will reclassify on request.
