@@ -32,11 +32,12 @@
 | `/ops-feedback` | Ops Slack feedback → structured Jira story |
 | `/ops-bug` | Ops Slack bug report → Jira bug ticket |
 | `/brain-weekly-email` | Compile Friday VP status email |
+| `/brain-decision` | Log a decision with alternatives, rationale, tradeoffs, and revisit trigger |
 
 ## Knowledge Base
 
 - Root: ~/brain/knowledge/
-- Categories: prd, decisions, stakeholders, jira, confluence, features, domain, oncall, scratch
+- Categories: prd, decisions, stakeholders, jira, confluence, features, domain, oncall, wins, scratch
 - SQLite index: ~/brain/data/brain.db
 - Inbox: ~/brain/inbox/
 

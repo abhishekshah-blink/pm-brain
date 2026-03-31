@@ -87,6 +87,7 @@ stakeholders: []       # optional: [name]
 | `/ops-feedback` | "ops feedback", "ops wants X", "feature request from ops", paste ops Slack |
 | `/ops-bug` | "ops bug", "ops reported X is broken", paste ops Slack describing broken behavior |
 | `/brain-weekly-email` | "write the weekly email", "weekly status", "draft email for VP", "Friday email" |
+| `/brain-decision` | "log a decision", "we decided X", "document this tradeoff", "record the rationale" — captures decision, alternatives, rationale, tradeoffs, revisit trigger |
 | `/wins` | "log a win", "capture this", "add a win", or pass a Jira key — manual capture for work not auto-detected by hooks |
 | `/wins-digest` | "review my wins", "prep for review", "quarterly digest", "promo case", "monthly summary" — accepts scope: weekly/monthly/quarterly/promo |
 
@@ -156,4 +157,5 @@ sqlite3 ~/brain/data/brain.db "SELECT title, category FROM knowledge_items WHERE
 3. **Jira tickets → knowledge/jira/{KEY}.md. Confluence pages → knowledge/confluence/{page_id}.md.**
 4. **Skills always check the brain before starting dev or product work.** Query SQLite first; read only matching files.
 5. **Wins are captured automatically.** PostToolUse hooks fire on Jira transitions and GitHub PR events → pending.jsonl. Nightly cron enriches into structured win files. Never manually log something the hooks already captured.
+6. **Jira syncs automatically every morning at 6:53am.** knowledge/jira/ and brain.db stay fresh without manual /brain-sync runs. Run /brain-sync manually only for specific tickets or Confluence pages.
 6. **When classification is uncertain (< 70% confidence), use scratch/.** Sorter will reclassify on request.

@@ -73,8 +73,13 @@ cross-functional ████ (2)
 ownership      ██ (1)
 
 ## Evidence to chase
-<List entries where impact_strength = needs-evidence>
-- <title>: <follow_up_needed>
+<All entries where impact_strength = needs-evidence OR follow_up_needed is not blank.
+For each, read the win entry's Collaborators and Evidence fields to suggest a specific action.
+Format as checkboxes so this is a real to-do list, not a passive note.>
+- [ ] **<title>** — <follow_up_needed>
+      → <specific action: who to ask, which Jira ticket to update, what system to pull data from>
+
+<If no entries need evidence: "All wins this week have sufficient evidence.">
 
 ## 1:1 talking point
 <One sentence summarizing the week's most impactful work — ready to say in a 1:1>

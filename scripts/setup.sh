@@ -21,6 +21,7 @@ SKILLS=(
   "wins"
   "wins-enricher"
   "wins-digest"
+  "brain-decision"
 )
 
 echo "==> Setting up ~/brain/ system"

@@ -13,7 +13,7 @@ It runs entirely inside [Claude Code](https://claude.ai/code). No new app. No ex
 **Builds a knowledge base from everything you encounter at work.**
 Jira tickets, Confluence pages, ops Slack messages, incident reports, meeting notes — organized into clean markdown files with a searchable database behind it. A filing system that files itself.
 
-**Gives you 13 slash commands grounded in that context.**
+**Gives you 14 slash commands grounded in that context.**
 When you run `/brain-plan`, it doesn't just help you plan — it first reads your existing PRDs, pulls the relevant Jira tickets live, checks your past decisions, and *then* writes the plan. Every skill is grounded in what you actually know.
 
 **And silently records everything you ship.**
@@ -73,7 +73,7 @@ You ship code or close a ticket
 
 ---
 
-## The 13 skills
+## The 14 skills
 
 ### Product work
 
@@ -83,6 +83,7 @@ You ship code or close a ticket
 | `/brain-plan` | Plan a feature end-to-end — loads existing PRDs, live Jira tickets, Confluence docs, and past decisions |
 | `/brain-prd` | Write a PRD or one-pager — concise one-pager for small features, full spec for major initiatives |
 | `/brain-user-story` | Turn a feature idea into a Jira story with acceptance criteria — creates the actual ticket |
+| `/brain-decision` | Log a decision with alternatives, rationale, tradeoffs, and a revisit trigger — fills `knowledge/decisions/` |
 | `/ops-feedback` | Paste a Slack message from ops — reads the codebase, checks prior work, creates a structured Jira story |
 | `/ops-bug` | Paste a bug report from ops — investigates the code path, assesses severity, creates a Jira bug ticket |
 | `/brain-weekly-email` | Compile the Friday VP status email — pulls Jira sprint data and formats your team's weekly update |
@@ -162,6 +163,7 @@ The SQLite database at `data/brain.db` indexes all of these so skills can search
 | `/brain-discovery` | Conversation + optionally `knowledge/features/` |
 | `/brain-plan` | `knowledge/features/` + conversation |
 | `/brain-prd` | `knowledge/prd/` + optionally Confluence |
+| `/brain-decision` | `knowledge/decisions/YYYY-MM-DD-slug.md` |
 | `/brain-user-story` | Jira ticket (created) + `knowledge/features/` |
 | `/ops-feedback` | Jira ticket (created) + `knowledge/features/` |
 | `/ops-bug` | Jira ticket (created) + optionally `knowledge/oncall/` |
@@ -222,7 +224,7 @@ In `~/.claude/mcp.json`:
 bash ~/brain/scripts/setup.sh
 ```
 
-Creates all knowledge folders, initializes the SQLite database, and symlinks all 13 skills into Claude Code so they appear as slash commands.
+Creates all knowledge folders, initializes the SQLite database, and symlinks all 14 skills into Claude Code so they appear as slash commands.
 
 **5. Enable automatic wins tracking**
 
@@ -240,9 +242,11 @@ Add the PostToolUse hook to `~/.claude/settings.json`:
 }
 ```
 
-Install the cron jobs (nightly enrichment + weekly digest):
+Install the cron jobs (daily Jira sync + nightly wins enrichment + weekly digest):
 ```bash
 (crontab -l 2>/dev/null; cat <<'EOF'
+# Brain daily Jira sync — every morning at 6:53am
+53 6 * * * /bin/bash -l ~/brain/scripts/sync-cron.sh
 # Brain wins enrichment — nightly at 10:37pm
 37 22 * * * /bin/bash -l ~/brain/scripts/wins-enrich-cron.sh
 # Brain wins weekly digest — Fridays at 6:43pm
