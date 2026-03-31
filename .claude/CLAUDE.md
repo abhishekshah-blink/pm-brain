@@ -83,8 +83,8 @@ stakeholders: []       # optional: [name]
 | `/brain-ship` | "ship this", "commit and push", "create a PR", "deploy to review" |
 | `/brain-investigate` | "debug this", "root cause this", "investigate WFM-1234", "why is X failing" |
 | `/brain-sync` | "sync Jira", "pull my tickets", "sync sprint", "sync WFM-1234" |
-| `/brain-ops-feedback` | "ops feedback", "ops wants X", "feature request from ops", paste ops Slack |
-| `/brain-ops-bug` | "ops bug", "ops reported X is broken", paste ops Slack describing broken behavior |
+| `/ops-feedback` | "ops feedback", "ops wants X", "feature request from ops", paste ops Slack |
+| `/ops-bug` | "ops bug", "ops reported X is broken", paste ops Slack describing broken behavior |
 | `/brain-weekly-email` | "write the weekly email", "weekly status", "draft email for VP", "Friday email" |
 
 **Skills always check the brain before starting product or dev work.** They query SQLite for relevant context, then load only the matching markdown files — keeping context window usage efficient.

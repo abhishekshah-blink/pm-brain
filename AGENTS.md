@@ -29,8 +29,8 @@
 | `/brain-ship` | Full pipeline: test → lint → review → commit → push → PR → Jira |
 | `/brain-investigate` | Root cause analysis with oncall history and knowledge base |
 | `/brain-sync` | Pull Jira/Confluence/GitHub into knowledge base via MCP |
-| `/brain-ops-feedback` | Ops Slack feedback → structured Jira story |
-| `/brain-ops-bug` | Ops Slack bug report → Jira bug ticket |
+| `/ops-feedback` | Ops Slack feedback → structured Jira story |
+| `/ops-bug` | Ops Slack bug report → Jira bug ticket |
 | `/brain-weekly-email` | Compile Friday VP status email |
 
 ## Knowledge Base

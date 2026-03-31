@@ -30,8 +30,8 @@ When you run `/brain-plan`, it doesn't just help you plan — it first reads you
 | `/brain-plan` | Plan a feature end-to-end — loads existing PRDs, live Jira tickets, Confluence docs, and past decisions before writing anything |
 | `/brain-prd` | Write a PRD or one-pager — two formats: a concise one-pager for small features, full spec for major initiatives |
 | `/brain-user-story` | Turn a feature idea into a Jira story — writes the story, acceptance criteria, and creates the actual ticket |
-| `/brain-ops-feedback` | Paste a Slack message from ops — reads the codebase, checks prior work, creates a structured Jira story |
-| `/brain-ops-bug` | Paste a bug report from ops — investigates the code path, assesses severity, creates a Jira bug ticket |
+| `/ops-feedback` | Paste a Slack message from ops — reads the codebase, checks prior work, creates a structured Jira story |
+| `/ops-bug` | Paste a bug report from ops — investigates the code path, assesses severity, creates a Jira bug ticket |
 | `/brain-weekly-email` | Compile the Friday VP status email — pulls Jira sprint data and formats your team's weekly update |
 
 ### Dev workflow
@@ -103,8 +103,8 @@ The SQLite database at `data/brain.db` indexes all of these files so skills can 
 | `/brain-plan` | `knowledge/features/` + conversation |
 | `/brain-prd` | `knowledge/prd/` + optionally Confluence |
 | `/brain-user-story` | Jira (ticket created) + `knowledge/features/` |
-| `/brain-ops-feedback` | Jira (ticket created) + `knowledge/features/` |
-| `/brain-ops-bug` | Jira (ticket created) + optionally `knowledge/oncall/` |
+| `/ops-feedback` | Jira (ticket created) + `knowledge/features/` |
+| `/ops-bug` | Jira (ticket created) + optionally `knowledge/oncall/` |
 | `/brain-review` | Conversation (confidence-scored issues, grouped by severity) |
 | `/brain-ship` | GitHub PR + Jira status updated + conversation |
 | `/brain-investigate` | Conversation + optionally `knowledge/oncall/` |
