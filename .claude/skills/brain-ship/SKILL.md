@@ -146,3 +146,26 @@ Tests: {X passed}
 Lint:  passed
 Review: {N important findings noted — see above / clean}
 ```
+
+### Step 11: Auto-log to wins queue
+
+Append a rich entry to the pending wins queue so the nightly enricher has full context:
+
+```bash
+python3 -c "
+import json, os
+from datetime import date
+entry = {
+    'date': date.today().isoformat(),
+    'source': 'skill_brain_ship',
+    'issue_key': '{KEY}',
+    'title': '{commit message summary}',
+    'pr_url': '{PR URL}',
+    'branch': '{branch}',
+}
+pending = os.path.expanduser('~/brain/knowledge/wins/pending.jsonl')
+os.makedirs(os.path.dirname(pending), exist_ok=True)
+with open(pending, 'a') as f:
+    f.write(json.dumps(entry) + '\n')
+"
+```

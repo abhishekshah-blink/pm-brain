@@ -37,6 +37,7 @@ The result: every planning, discovery, PRD, story, review, ship, and investigate
 | `features` | knowledge/features/ | Feature briefs at various stages: discovery → design → dev → shipped |
 | `domain` | knowledge/domain/ | WFM/pharmacy domain knowledge, SLA concepts, business glossary |
 | `oncall` | knowledge/oncall/ | Incident postmortems, runbooks, alert context |
+| `wins` | knowledge/wins/ | Work accomplishments and impact records — auto-captured by hooks + nightly enricher. Digests in knowledge/wins/digests/ |
 | `scratch` | knowledge/scratch/ | Unclassified/working notes; reclassify later with Sorter |
 
 ### Naming Conventions
@@ -51,7 +52,7 @@ The result: every planning, discovery, PRD, story, review, ship, and investigate
 ```yaml
 ---
 title: <title>
-category: prd|decisions|stakeholders|jira|confluence|features|domain|oncall|scratch
+category: prd|decisions|stakeholders|jira|confluence|features|domain|oncall|wins|scratch
 tags: [tag1, tag2]
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
@@ -86,6 +87,8 @@ stakeholders: []       # optional: [name]
 | `/ops-feedback` | "ops feedback", "ops wants X", "feature request from ops", paste ops Slack |
 | `/ops-bug` | "ops bug", "ops reported X is broken", paste ops Slack describing broken behavior |
 | `/brain-weekly-email` | "write the weekly email", "weekly status", "draft email for VP", "Friday email" |
+| `/wins` | "log a win", "capture this", "add a win", or pass a Jira key — manual capture for work not auto-detected by hooks |
+| `/wins-digest` | "review my wins", "prep for review", "quarterly digest", "promo case", "monthly summary" — accepts scope: weekly/monthly/quarterly/promo |
 
 **Skills always check the brain before starting product or dev work.** They query SQLite for relevant context, then load only the matching markdown files — keeping context window usage efficient.
 
@@ -152,4 +155,5 @@ sqlite3 ~/brain/data/brain.db "SELECT title, category FROM knowledge_items WHERE
 2. **Every knowledge item must have YAML frontmatter** with at minimum: title, category, tags, created, updated.
 3. **Jira tickets → knowledge/jira/{KEY}.md. Confluence pages → knowledge/confluence/{page_id}.md.**
 4. **Skills always check the brain before starting dev or product work.** Query SQLite first; read only matching files.
-5. **When classification is uncertain (< 70% confidence), use scratch/.** Sorter will reclassify on request.
+5. **Wins are captured automatically.** PostToolUse hooks fire on Jira transitions and GitHub PR events → pending.jsonl. Nightly cron enriches into structured win files. Never manually log something the hooks already captured.
+6. **When classification is uncertain (< 70% confidence), use scratch/.** Sorter will reclassify on request.

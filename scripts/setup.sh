@@ -3,9 +3,25 @@
 # Idempotent setup: creates directories, initializes SQLite schema, symlinks skills into ~/.claude/skills/
 set -euo pipefail
 
-BRAIN_DIR="$HOME/brain"
+BRAIN_DIR="${BRAIN_DIR:-$HOME/brain}"
 CLAUDE_SKILLS_DIR="$HOME/.claude/skills"
-SKILLS=("brain-plan" "brain-review" "brain-ship" "brain-investigate" "brain-retro" "brain-sync" "brain-ops-feedback" "brain-ops-bug" "brain-weekly-email" "brain-user-story" "brain-prd")
+# Must match folders under $BRAIN_DIR/.claude/skills/ (names Cursor / Claude Code discover via ~/.claude/skills symlinks)
+SKILLS=(
+  "brain-discovery"
+  "brain-plan"
+  "brain-prd"
+  "brain-user-story"
+  "brain-review"
+  "brain-ship"
+  "brain-investigate"
+  "brain-sync"
+  "ops-feedback"
+  "ops-bug"
+  "brain-weekly-email"
+  "wins"
+  "wins-enricher"
+  "wins-digest"
+)
 
 echo "==> Setting up ~/brain/ system"
 echo ""
@@ -14,14 +30,15 @@ echo ""
 echo "[1/4] Creating directory structure..."
 mkdir -p \
   "$BRAIN_DIR"/{inbox,data,scripts} \
-  "$BRAIN_DIR"/knowledge/{prd,decisions,stakeholders,jira,confluence,features,retros,domain,oncall,scratch} \
+  "$BRAIN_DIR"/knowledge/{prd,decisions,stakeholders,jira,confluence,features,domain,oncall,scratch} \
+  "$BRAIN_DIR"/knowledge/wins/digests \
+  "$BRAIN_DIR"/logs \
   "$BRAIN_DIR"/.claude/{agents,skills} \
   "$BRAIN_DIR"/.claude/skills/brain-plan \
   "$BRAIN_DIR"/.claude/skills/brain-ship \
   "$BRAIN_DIR"/.claude/skills/brain-sync \
   "$BRAIN_DIR"/.claude/skills/brain-review/references \
   "$BRAIN_DIR"/.claude/skills/brain-investigate/references \
-  "$BRAIN_DIR"/.claude/skills/brain-retro/references \
   "$CLAUDE_SKILLS_DIR"
 echo "    Done."
 
@@ -130,11 +147,13 @@ printf "    %-22s %s\n" "SKILL" "STATUS"
 printf "    %-22s %s\n" "-----" "------"
 all_ok=true
 for skill in "${SKILLS[@]}"; do
-  skill_md="$CLAUDE_SKILLS_DIR/$skill/SKILL.md"
-  if [ -r "$skill_md" ]; then
+  skill_dir="$BRAIN_DIR/.claude/skills/$skill"
+  skill_md="$skill_dir/SKILL.md"
+  skill_md_alt="$skill_dir/skill.md"
+  if [ -r "$skill_md" ] || [ -r "$skill_md_alt" ]; then
     printf "    %-22s %s\n" "$skill" "readable"
   else
-    printf "    %-22s %s\n" "$skill" "MISSING — populate $BRAIN_DIR/.claude/skills/$skill/SKILL.md"
+    printf "    %-22s %s\n" "$skill" "MISSING — populate $skill_dir/SKILL.md"
     all_ok=false
   fi
 done
@@ -147,7 +166,7 @@ else
 fi
 echo ""
 echo "Next steps:"
-echo "  1. Open a Claude Code session in ~/brain/"
+echo "  1. Open this repo in Cursor (~/brain) or use Claude Code here"
 echo "  2. Run /brain-sync sprint  to pull your current Jira sprint"
-echo "  3. Run /brain-retro        to generate your first weekly retro"
-echo "  4. From any Blinkhealth project, run /brain-plan <feature> to plan with full context"
+echo "  3. Run /brain-plan <feature> to plan with brain + live Jira/Confluence context"
+echo "  4. From Blinkhealth code repos, use the same skills if linked in ~/.claude/skills/"

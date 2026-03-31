@@ -15,12 +15,38 @@ pm-brain does two things:
 **Builds a knowledge base from everything you encounter at work.**
 Jira tickets, Confluence pages, ops Slack messages, meeting notes, incident reports — all of it gets organized into a folder of clean markdown files, with a searchable database behind it. A filing system that files itself.
 
-**Gives you 11 slash commands that use that knowledge to do PM and dev work.**
+**Gives you 13 slash commands that use that knowledge to do PM and dev work.**
 When you run `/brain-plan`, it doesn't just help you plan — it first reads your existing PRDs, pulls the relevant Jira tickets live, checks your past decisions, and *then* writes the plan. Every skill is grounded in what you actually know.
+
+**And it silently records everything you ship.** Every Jira transition, every GitHub PR, every bug triaged — captured automatically in the background, enriched by Claude overnight, ready for review season.
 
 ---
 
-## The 11 skills
+## Automatic wins tracking
+
+The hardest part of performance reviews is remembering what you did six months ago. pm-brain solves this without any extra effort.
+
+**How it works:**
+
+Every time you use a brain skill — or directly transition a Jira ticket or merge a GitHub PR — a hook fires instantly and logs a raw signal to a pending queue. You don't see it. You don't do anything. It just happens.
+
+Every night at 10:37pm, a cron job runs and Claude enriches those raw signals into structured accomplishment records: what you did, why it mattered, a review-ready bullet, a resume bullet, and a flag for any evidence still missing.
+
+Every Friday at 6:43pm, a weekly digest is generated automatically and saved to your knowledge base.
+
+When review season arrives, run `/wins-digest quarterly` or `/wins-digest promo` and get a full draft self-review, manager talking points, and a promotion case narrative — built from six months of automatically captured work.
+
+**What gets captured automatically:**
+- Every GitHub PR you create or merge
+- Every Jira ticket you transition (to In Review, Done, or Closed)
+- Every Jira ticket created via `/ops-feedback` or `/ops-bug`
+- Every shipment via `/brain-ship`
+
+**For things that don't go through Jira or GitHub** (a key conversation, a process you improved, a decision you drove): use `/wins` to add it manually in under 30 seconds.
+
+---
+
+## The 13 skills
 
 ### Product work
 
@@ -33,6 +59,8 @@ When you run `/brain-plan`, it doesn't just help you plan — it first reads you
 | `/ops-feedback` | Paste a Slack message from ops — reads the codebase, checks prior work, creates a structured Jira story |
 | `/ops-bug` | Paste a bug report from ops — investigates the code path, assesses severity, creates a Jira bug ticket |
 | `/brain-weekly-email` | Compile the Friday VP status email — pulls Jira sprint data and formats your team's weekly update |
+| `/wins` | Manually capture a win not auto-detected — accepts a raw note or a Jira key |
+| `/wins-digest` | On-demand synthesis — pass `quarterly` for review prep or `promo` for a promotion case |
 
 ### Dev workflow
 
@@ -73,6 +101,8 @@ knowledge/
 ├── confluence/     ← Live Confluence page snapshots (synced by Scout)
 ├── domain/         ← Domain knowledge and business glossary
 ├── oncall/         ← Incident notes and runbooks
+├── wins/           ← Auto-captured accomplishment records (enriched nightly)
+│   └── digests/    ← Weekly and quarterly synthesized summaries
 └── scratch/        ← Unclassified notes (Sorter will reclassify)
 ```
 

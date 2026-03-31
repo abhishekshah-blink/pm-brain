@@ -1,0 +1,39 @@
+---
+description: Personal Knowledge Accelerator — brain repo conventions, agents, and skills
+alwaysApply: true
+---
+
+# Brain workspace (`~/brain`)
+
+This folder is Abhishek’s **Personal Knowledge Accelerator**: structured markdown in `knowledge/`, query index in `data/brain.db`, inbox in `inbox/`, agents and skills under `.claude/`.
+
+## Single source of truth
+
+Before doing substantive brain, PM, or sync work, align with:
+
+- `.claude/CLAUDE.md` — taxonomy, frontmatter, SQLite patterns, MCP expectations, invariants
+- `AGENTS.md` — short index of agents and slash-command skills
+
+## Agents (via Task tool)
+
+| Agent | Role |
+| --- | --- |
+| **Sorter** | Inbox orchestration and classification |
+| **Keeper** | Write and index knowledge; answer lookups |
+| **Scout** | Pull Jira, Confluence, GitHub into `knowledge/` |
+
+## Skills
+
+When the user’s request matches a skill’s description, **read that skill’s `SKILL.md` and follow it**. Skills live in `.claude/skills/<name>/` and are also linked from `~/.claude/skills/` for Claude Code.
+
+Triggers include: plan a feature, write a PRD, user story, code review, ship, investigate, sync Jira/Confluence, ops feedback/bug, weekly email, discovery framing.
+
+## Invariants (do not ignore)
+
+1. **Markdown is truth** — SQLite is for search; do not delete knowledge markdown casually; update in place.
+2. **Frontmatter** on knowledge items: at least `title`, `category`, `tags`, `created`, `updated` per `.claude/CLAUDE.md`.
+3. **Query the index first** for context-heavy tasks: `sqlite3 ~/brain/data/brain.db "<query>"` (see `.claude/CLAUDE.md` for examples).
+
+## User-level Cursor
+
+Global rules may live in `~/.cursor/rules/` (e.g. Databricks read-only). This project rule applies when the workspace is `~/brain`.
