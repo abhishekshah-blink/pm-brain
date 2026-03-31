@@ -1,7 +1,7 @@
 ---
 name: brain-sync
 version: 1.0.0
-description: This skill should be used when the user wants to "sync Jira", "pull my tickets", "sync Confluence", "update my brain from Jira", "pull sprint tickets", "sync a specific ticket WFM-XXXX", or "show my open PRs". Invokes the Spark agent to pull live Jira, Confluence, and GitHub data into ~/brain/knowledge/.
+description: This skill should be used when the user wants to "sync Jira", "pull my tickets", "sync Confluence", "update my brain from Jira", "pull sprint tickets", "sync a specific ticket WFM-XXXX", or "show my open PRs". Invokes the Scout agent to pull live Jira, Confluence, and GitHub data into ~/brain/knowledge/.
 allowed-tools: Read, Write, Bash, Task, mcp__atlassian__jira_search, mcp__atlassian__jira_get_issue, mcp__atlassian__jira_get_sprint_issues, mcp__atlassian__jira_get_sprints_from_board, mcp__atlassian__confluence_search, mcp__atlassian__confluence_get_page, mcp__github__list_pull_requests
 ---
 

@@ -32,8 +32,8 @@ The result: every planning, review, ship, investigate, and retro action is infor
 | `prd` | knowledge/prd/ | PRDs, user stories, acceptance criteria, launch checklists |
 | `decisions` | knowledge/decisions/ | ADRs, product decisions, tradeoff docs, meeting decisions with rationale |
 | `stakeholders` | knowledge/stakeholders/ | One file per person/team: role, preferences, priorities, communication style |
-| `jira` | knowledge/jira/ | Ticket snapshots synced by Spark — filename: `{KEY}.md` (e.g. WFM-1234.md) |
-| `confluence` | knowledge/confluence/ | Page snapshots synced by Spark — filename: `{page_id}.md` |
+| `jira` | knowledge/jira/ | Ticket snapshots synced by Scout — filename: `{KEY}.md` (e.g. WFM-1234.md) |
+| `confluence` | knowledge/confluence/ | Page snapshots synced by Scout — filename: `{page_id}.md` |
 | `features` | knowledge/features/ | Feature briefs at various stages: discovery → design → dev → shipped |
 | `retros` | knowledge/retros/ | Weekly retro outputs — filename: `YYYY-WW.md` |
 | `domain` | knowledge/domain/ | WFM/pharmacy domain knowledge, SLA concepts, business glossary |
@@ -43,7 +43,7 @@ The result: every planning, review, ship, investigate, and retro action is infor
 | `ai-strategy` | knowledge/ai-strategy/ | AI adoption plans, agentic architecture decisions, AI tooling evaluations |
 | `coaching-sessions` | knowledge/coaching-sessions/ | 1:1 coaching notes, leadership feedback, growth areas |
 | `operating-plans` | knowledge/operating-plans/ | Quarterly/annual operating plans, roadmaps, team capacity plans |
-| `scratch` | knowledge/scratch/ | Unclassified/working notes; reclassify later with Roni |
+| `scratch` | knowledge/scratch/ | Unclassified/working notes; reclassify later with Sorter |
 
 ### Naming Conventions
 
@@ -72,11 +72,11 @@ stakeholders: []       # optional: [name]
 
 | Agent | File | Role | Invocation |
 |---|---|---|---|
-| **Roni** | .claude/agents/roni.md | Orchestrator — inbox processing and delegation | "Ask Roni to process inbox" / "Roni, classify these notes" |
-| **Nova** | .claude/agents/nova.md | Knowledge librarian — writes + indexes knowledge items; answers lookup queries | "Nova, index this PRD" / "Nova, find context on task assignment SLA" |
-| **Spark** | .claude/agents/spark.md | MCP sync agent — pulls Jira, Confluence, GitHub into knowledge base | "Spark, sync my sprint" / "Spark, pull WFM-1234" |
+| **Sorter** | .claude/agents/sorter.md | Orchestrator — inbox processing and delegation | "Ask Sorter to process inbox" / "Sorter, classify these notes" |
+| **Keeper** | .claude/agents/keeper.md | Knowledge librarian — writes + indexes knowledge items; answers lookup queries | "Keeper, index this PRD" / "Keeper, find context on task assignment SLA" |
+| **Scout** | .claude/agents/scout.md | MCP sync agent — pulls Jira, Confluence, GitHub into knowledge base | "Scout, sync my sprint" / "Scout, pull WFM-1234" |
 
-**Rule:** Agents are spawned via the Task tool. Skills and users interact with Roni; Roni delegates to Nova and Spark.
+**Rule:** Agents are spawned via the Task tool. Skills and users interact with Sorter; Sorter delegates to Keeper and Scout.
 
 ## Skills
 
@@ -147,4 +147,4 @@ sqlite3 ~/brain/data/brain.db "SELECT date, summary FROM daily_summaries WHERE d
 3. **Jira tickets → knowledge/jira/{KEY}.md. Confluence pages → knowledge/confluence/{page_id}.md.**
 4. **Skills always check the brain before starting dev or product work.** Query SQLite first; read only matching files.
 5. **Retros are written weekly** to knowledge/retros/YYYY-WW.md.
-6. **When classification is uncertain (< 70% confidence), use scratch/.** Roni will reclassify on request.
+6. **When classification is uncertain (< 70% confidence), use scratch/.** Sorter will reclassify on request.
