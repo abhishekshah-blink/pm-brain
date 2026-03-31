@@ -1,0 +1,14 @@
+# Personal knowledge — never commit
+knowledge/**
+!knowledge/**/.gitkeep
+inbox/**
+!inbox/.gitkeep
+
+# SQLite database — binary, personal data
+data/brain.db
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
