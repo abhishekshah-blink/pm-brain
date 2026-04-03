@@ -155,19 +155,28 @@ The SQLite database at `data/brain.db` indexes all files so skills can search ac
 
 ---
 
-## Company template integration
+## How brain delegates to other tools
 
-Three brain skills use company-standard templates read from `~/.claude/blink-ai-tools/report_templates/`:
+Some brain skills are thin wrappers — they add PM context (JTBD framing, brain.db lookup, acceptance criteria) and then hand off to a canonical tool or template rather than re-implementing it.
 
-| Skill | Template used |
+**Templates** — three skills read company-standard templates at runtime from `~/.claude/blink-ai-tools/report_templates/`:
+
+| Brain skill | Delegates to |
 |---|---|
-| `/brain-prd` | `brd_template.md` — adds problem statement gate, JTBD framing, Working Backwards stress-test on top |
-| `/brain-user-story` | `roadmap_ticket.md` — adds JTBD framing, INVEST check, epic hypothesis on top |
-| `/brain-weekly-email` | `weekly_status_email_template.html` — pulls Jira data and fills it automatically |
+| `/brain-prd` | `brd_template.md` — brain adds problem statement gate, JTBD framing, Working Backwards stress-test |
+| `/brain-user-story` | `roadmap_ticket.md` — brain adds JTBD framing, INVEST check, epic hypothesis |
+| `/brain-weekly-email` | `weekly_status_email_template.html` — brain pulls Jira sprint data and fills it |
 
-Additional templates available (reference manually):
+Additional templates (reference manually from `~/.claude/blink-ai-tools/report_templates/`):
 - `technical_design_document_template.md` — TRD with architecture diagrams, IAM, threat model, cost analysis
 - `test_plan_template.md` — QA test plan with scope, entry/exit criteria, risk matrix
+
+**Engineering skills** — brain-ship checks whether `/eng-workflow` is the better tool before proceeding:
+
+| Brain skill | Defers to | When |
+|---|---|---|
+| `/brain-ship` | `/eng-workflow` | Story points ≥ 0.5, new features, architecture changes |
+| `/brain-review` | `/pr-review` | After a branch is pushed (post-push GitHub review vs pre-commit local check) |
 
 ---
 
@@ -312,9 +321,11 @@ EOF
 
 ## Credits
 
-**[PKA](https://github.com/nir-sheep/pka)** by Nir Sheep — the pattern of building a second brain with AI agents: a filing inbox, specialist agents that classify and index, and a clean taxonomy of knowledge categories.
+Patterns borrowed from three projects:
 
-**[gstack](https://github.com/garrytan/gstack)** by Garry Tan — the pattern of slash-command skills as plain markdown files. The PREAMBLE system, voice directives, completion protocol, and fix-first heuristic are adapted from gstack.
+- **[PKA](https://github.com/nir-sheep/pka)** by Nir Sheep — filing inbox, specialist agents, knowledge taxonomy
+- **[gstack](https://github.com/garrytan/gstack)** by Garry Tan — slash-command skills as markdown, PREAMBLE system, voice directives, fix-first heuristic
+- **[blink-ai-tools](https://github.com/blinkhealth/blink-ai-tools)** — company SDLC automation: engineering skills, Cursor rules, and document templates that brain skills delegate to
 
 ---
 
