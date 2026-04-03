@@ -6,6 +6,23 @@ Most PMs carry too much in their heads: what was decided last sprint, what ops r
 
 It runs entirely inside [Claude Code](https://claude.ai/code). No new app. No extra subscription. Just commands you type, and agents that do the work.
 
+<details>
+<summary>Table of contents</summary>
+
+- [What it does](#what-it-does)
+- [Capabilities](#capabilities)
+  - [Product work](#product-work)
+  - [Engineering work](#engineering-work)
+  - [Ops intake](#ops-intake)
+  - [Knowledge and sync](#knowledge-and-sync)
+- [Wins tracking](#wins-tracking)
+- [Skill Scout](#skill-scout)
+- [Under the hood](#under-the-hood)
+- [Getting started](#getting-started)
+- [Credits](#credits)
+
+</details>
+
 ---
 
 ## What it does
