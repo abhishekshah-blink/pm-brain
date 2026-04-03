@@ -8,21 +8,6 @@ It runs entirely inside [Claude Code](https://claude.ai/code). No new app. No ex
 
 ---
 
-## The ~/pm/ ecosystem
-
-pm-brain is one part of a broader AI workspace. All four repos live together under `~/pm/`:
-
-| Repo | What it does |
-|---|---|
-| **`brain/`** ← this repo | PM knowledge system — skills, agents, knowledge base, wins tracking |
-| **`blink-ai-tools/`** | Engineering workflow automation — SDLC skills, MCP server, Cursor rules, report templates |
-| **`blink-ai-agents/`** | Production AI backend service (Django + OpenAI SDK + LangGraph) for pharmacy workflows |
-| **`claude-code-best-practice/`** | Reference patterns — hooks, orchestration, skill writing best practices |
-
-At session start, `blink-ai-tools` auto-syncs its skills into `~/.claude/commands/` via a `SessionStart` hook, making both systems available in every Claude Code session. pm-brain's skills are separately symlinked into `~/.claude/skills/` via `setup.sh`.
-
----
-
 ## What it does
 
 **Builds a knowledge base from everything you encounter at work.**
@@ -58,9 +43,7 @@ Every Jira transition, every GitHub PR, every bug triaged — captured automatic
 
 ---
 
-## Engineering Skills (auto-synced from blink-ai-tools)
-
-These sync into `~/.claude/commands/` on every session start. Use them for engineering work — don't re-implement them in brain.
+## Engineering Skills
 
 | Skill | When to use |
 |---|---|
@@ -174,7 +157,7 @@ The SQLite database at `data/brain.db` indexes all files so skills can search ac
 
 ## Company template integration
 
-brain skills use company-standard templates from `blink-ai-tools` automatically (fetched at `~/.claude/blink-ai-tools/report_templates/` after bootstrap):
+Three brain skills use company-standard templates read from `~/.claude/blink-ai-tools/report_templates/`:
 
 | Skill | Template used |
 |---|---|
@@ -194,7 +177,6 @@ Four hooks are wired in `~/.claude/settings.json`:
 
 | Event | Hook | What it does |
 |---|---|---|
-| `SessionStart` | `bootstrap_tools.sh` | Clones/updates blink-ai-tools and syncs its skills/agents/hooks into `~/.claude/` |
 | `PostToolUse` | `wins-hook.py` | Fires on Jira transitions and GitHub PR events → appends to `wins/pending.jsonl` |
 | `Stop` | `wins-hook.py` | Scans the session transcript for meaningful work → logs aggregated session entry |
 | `PreCompact` | `pre-compact-hook.py` | Before context compression → snapshots session state to `scratch/compact-log.jsonl` |
@@ -224,9 +206,8 @@ Three background jobs run on schedule:
 
 ## Setup
 
-**1. Clone into ~/pm/**
+**1. Clone**
 ```bash
-mkdir -p ~/pm
 git clone https://github.com/abhishekshah-blink/pm-brain ~/pm/brain
 ```
 
@@ -269,11 +250,6 @@ Add to `~/.claude/settings.json`:
 ```json
 {
   "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [{ "type": "command", "command": "bash ~/pm/blink-ai-tools/.claude/hooks/bootstrap_tools.sh" }]
-      }
-    ],
     "PostToolUse": [
       {
         "matcher": "mcp__atlassian__jira_transition_issue|mcp__atlassian__jira_create_issue|mcp__github__create_pull_request|mcp__github__merge_pull_request",
@@ -339,8 +315,6 @@ EOF
 **[PKA](https://github.com/nir-sheep/pka)** by Nir Sheep — the pattern of building a second brain with AI agents: a filing inbox, specialist agents that classify and index, and a clean taxonomy of knowledge categories.
 
 **[gstack](https://github.com/garrytan/gstack)** by Garry Tan — the pattern of slash-command skills as plain markdown files. The PREAMBLE system, voice directives, completion protocol, and fix-first heuristic are adapted from gstack.
-
-**[blink-ai-tools](https://github.com/blinkhealth/blink-ai-tools)** — company SDLC automation repo providing the engineering skills (`/eng-workflow`, `/pr-review`, `/ai-retro`) and standard document templates (BRD, roadmap ticket, weekly email HTML) that brain skills use.
 
 ---
 
