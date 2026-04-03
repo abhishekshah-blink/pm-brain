@@ -5,7 +5,7 @@
 
 ## What This Is
 
-~/brain/ is Abhishek Shah's Personal Knowledge Accelerator — a second brain for a PM who builds at Blinkhealth. It combines:
+~/pm/brain/ is Abhishek Shah's Personal Knowledge Accelerator — a second brain for a PM who builds at Blinkhealth. It combines:
 - **Knowledge management:** raw inputs (Jira, Confluence, PDFs, meeting notes) → structured markdown → SQLite index
 - **Dev workflow skills:** slash commands for planning, reviewing, shipping, debugging, and retrospectives
 
@@ -15,7 +15,7 @@
 |---|---|
 | **Sorter** | Orchestrator. Processes inbox, classifies files, delegates to Keeper and Scout. Entry point for batch operations. |
 | **Keeper** | Knowledge librarian. Writes and indexes knowledge items. Answers lookup queries from skills. |
-| **Scout** | MCP sync agent. Pulls Jira tickets, Confluence pages, and GitHub PRs into ~/brain/knowledge/. |
+| **Scout** | MCP sync agent. Pulls Jira tickets, Confluence pages, and GitHub PRs into ~/pm/brain/knowledge/. |
 
 ## Skills (slash commands)
 
@@ -36,10 +36,10 @@
 
 ## Knowledge Base
 
-- Root: ~/brain/knowledge/
+- Root: ~/pm/brain/knowledge/
 - Categories: prd, decisions, stakeholders, jira, confluence, features, domain, oncall, wins, scratch
-- SQLite index: ~/brain/data/brain.db
-- Inbox: ~/brain/inbox/
+- SQLite index: ~/pm/brain/data/brain.db
+- Inbox: ~/pm/brain/inbox/
 
 ## Full Instructions
 

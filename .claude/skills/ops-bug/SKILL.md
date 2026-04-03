@@ -6,7 +6,7 @@ allowed-tools: Read, Glob, Grep, Bash, Write, mcp__atlassian__jira_create_issue,
 ---
 
 ## Brain Context
-Read ~/brain/.claude/PREAMBLE.md now. Follow all directives within it.
+Read ~/pm/brain/.claude/PREAMBLE.md now. Follow all directives within it.
 - Current date: !`date +%Y-%m-%d`
 - ISO week: !`date +%G-W%V`
 
@@ -39,7 +39,7 @@ Map the bug to the most likely service (same mapping as brain-ops-feedback):
 
 Search for similar past incidents:
 ```bash
-sqlite3 ~/brain/data/brain.db "
+sqlite3 ~/pm/brain/data/brain.db "
 SELECT title, file_path, summary
 FROM knowledge_items
 WHERE category = 'oncall'
@@ -71,7 +71,7 @@ Read relevant files. Look for:
 - Recent git changes to this area: `git -C ~/Documents/blinkhealth/<service>/ log --oneline -10 -- <relevant_file>`
 
 Load the debug patterns reference:
-Read `~/brain/.claude/skills/brain-investigate/references/debug-patterns.md` for Blinkhealth-specific patterns that match this bug type.
+Read `~/pm/brain/.claude/skills/brain-investigate/references/debug-patterns.md` for Blinkhealth-specific patterns that match this bug type.
 
 ### Step 5: Assess severity
 
@@ -129,8 +129,8 @@ If P1/P2: ask "This looks urgent — do you want me to also send a Jira comment 
 
 Append to weekly activity log:
 ```bash
-echo "- Bug triaged → <JIRA_KEY> (P<N>): <title> ($(date +%Y-%m-%d))" >> ~/brain/knowledge/scratch/$(date +%G-W%V)-activity.md
+echo "- Bug triaged → <JIRA_KEY> (P<N>): <title> ($(date +%Y-%m-%d))" >> ~/pm/brain/knowledge/scratch/$(date +%G-W%V)-activity.md
 ```
 
-If a new root cause or pattern was found, offer to write to `~/brain/knowledge/oncall/`:
+If a new root cause or pattern was found, offer to write to `~/pm/brain/knowledge/oncall/`:
 "Should I save the investigation findings to knowledge/oncall/ for future reference?"

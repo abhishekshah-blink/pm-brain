@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# ~/brain/scripts/setup.sh
+# ~/pm/brain/scripts/setup.sh
 # Idempotent setup: creates directories, initializes SQLite schema, symlinks skills into ~/.claude/skills/
 set -euo pipefail
 
@@ -24,7 +24,7 @@ SKILLS=(
   "brain-decision"
 )
 
-echo "==> Setting up ~/brain/ system"
+echo "==> Setting up ~/pm/brain/ system"
 echo ""
 
 # ── Step 1: Directory structure ────────────────────────────────────────────

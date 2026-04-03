@@ -6,7 +6,7 @@ allowed-tools: Read, Glob, Grep, Bash, Write, mcp__atlassian__jira_get_issue, mc
 ---
 
 ## Brain Context
-Read ~/brain/.claude/PREAMBLE.md now. Follow all directives within it.
+Read ~/pm/brain/.claude/PREAMBLE.md now. Follow all directives within it.
 - Current date: !`date +%Y-%m-%d`
 - ISO week: !`date +%G-W%V`
 
@@ -25,7 +25,7 @@ If empty → ask: "What decision was made? (one sentence is fine to start)"
 ### Step 2: Check for duplicates
 
 ```bash
-sqlite3 ~/brain/data/brain.db "
+sqlite3 ~/pm/brain/data/brain.db "
 SELECT title, file_path FROM knowledge_items
 WHERE category = 'decisions'
 AND (title LIKE '%<key_term>%' OR tags LIKE '%<key_term>%')
@@ -66,7 +66,7 @@ If the user can't articulate a revisit trigger, suggest one based on the tradeof
 
 ### Step 5: Write the decision record
 
-Save to `~/brain/knowledge/decisions/<YYYY-MM-DD>-<slug>.md`:
+Save to `~/pm/brain/knowledge/decisions/<YYYY-MM-DD>-<slug>.md`:
 
 ```markdown
 ---
@@ -108,7 +108,7 @@ decision_type: product|technical|process|strategic
 ### Step 6: Index and confirm
 
 ```bash
-sqlite3 ~/brain/data/brain.db "
+sqlite3 ~/pm/brain/data/brain.db "
 INSERT OR REPLACE INTO knowledge_items (title, category, tags, file_path, summary, created, updated)
 VALUES ('<title>', 'decisions', '<decision_type>,<project_tag>', '<file_path>', '<rationale_one_sentence>', '<today>', '<today>');
 " 2>/dev/null || true

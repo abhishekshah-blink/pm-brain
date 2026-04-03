@@ -32,7 +32,7 @@ Triggers include: plan a feature, write a PRD, user story, code review, ship, in
 
 1. **Markdown is truth** — SQLite is for search; do not delete knowledge markdown casually; update in place.
 2. **Frontmatter** on knowledge items: at least `title`, `category`, `tags`, `created`, `updated` per `.claude/CLAUDE.md`.
-3. **Query the index first** for context-heavy tasks: `sqlite3 ~/brain/data/brain.db "<query>"` (see `.claude/CLAUDE.md` for examples).
+3. **Query the index first** for context-heavy tasks: `sqlite3 ~/pm/brain/data/brain.db "<query>"` (see `.claude/CLAUDE.md` for examples).
 
 ## User-level Cursor
 

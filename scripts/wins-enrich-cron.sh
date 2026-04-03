@@ -1,12 +1,12 @@
-#!/bin/bash
-# Nightly wins enrichment — processes pending.jsonl into structured win files.
-# Called by cron. Sources the user environment so MCP credentials are available.
+#!/bin/zsh
+# Wins enrichment — processes pending.jsonl into structured win files.
+# Runs daily at 5:30pm. Called by cron. Uses a zsh login shell so ~/.zshrc env vars are available.
 
 set -euo pipefail
 
 CLAUDE="/Users/abhishek.shah/.local/bin/claude"
-LOG="$HOME/brain/logs/wins-enricher.log"
-PENDING="$HOME/brain/knowledge/wins/pending.jsonl"
+LOG="$HOME/pm/brain/logs/wins-enricher.log"
+PENDING="$HOME/pm/brain/knowledge/wins/pending.jsonl"
 
 # Nothing to do if no pending entries
 if [[ ! -f "$PENDING" ]] || [[ ! -s "$PENDING" ]]; then
@@ -21,7 +21,7 @@ echo "[$(date '+%Y-%m-%d %H:%M')] Starting wins enrichment..." >> "$LOG"
 
 "$CLAUDE" \
   --allowedTools "Read,Write,Bash,Glob,Grep,mcp__atlassian__jira_get_issue,mcp__atlassian__jira_search,mcp__github__get_file_contents" \
-  -p "Read ~/brain/.claude/skills/wins-enricher/SKILL.md for full instructions. Execute those instructions now. Today is $TODAY. ISO week: $WEEK." \
+  -p "Read ~/pm/brain/.claude/skills/wins-enricher/SKILL.md for full instructions. Execute those instructions now. Today is $TODAY. ISO week: $WEEK." \
   >> "$LOG" 2>&1
 
 echo "[$(date '+%Y-%m-%d %H:%M')] Enrichment complete." >> "$LOG"

@@ -6,9 +6,9 @@ allowed-tools: Read, Glob, Grep, Bash, Write, Task, mcp__atlassian__jira_create_
 ---
 
 ## Brain Context
-Read ~/brain/.claude/PREAMBLE.md now. Follow all directives within it.
-Read ~/brain/knowledge/domain/jobs-to-be-done.md — used in Step 1.5.
-Read ~/brain/knowledge/domain/user-story-best-practices.md — used for INVEST check and splitting.
+Read ~/pm/brain/.claude/PREAMBLE.md now. Follow all directives within it.
+Read ~/pm/brain/knowledge/domain/jobs-to-be-done.md — used in Step 1.5.
+Read ~/pm/brain/knowledge/domain/user-story-best-practices.md — used for INVEST check and splitting.
 - Current date: !`date +%Y-%m-%d`
 - ISO week: !`date +%G-W%V`
 
@@ -43,13 +43,13 @@ Emotional job: [state to achieve / avoid]
 
 This becomes the "so that" clause of the story. A story without a grounded job statement is a task, not a story.
 
-Reference: `~/brain/knowledge/domain/jobs-to-be-done.md`
+Reference: `~/pm/brain/knowledge/domain/jobs-to-be-done.md`
 
 ### Step 2: Brain context lookup
 
 Check for related PRDs, decisions, or existing features:
 ```bash
-sqlite3 ~/brain/data/brain.db "
+sqlite3 ~/pm/brain/data/brain.db "
 SELECT title, category, file_path, summary
 FROM knowledge_items
 WHERE (title LIKE '%<term>%' OR tags LIKE '%<term>%')
@@ -75,44 +75,39 @@ grep -r "<key_feature_term>" ~/Documents/blinkhealth/<service>/ --include="*.py"
 
 ### Step 4: Draft the story
 
+Read the company ticket template: `~/.claude/blink-ai-tools/report_templates/roadmap_ticket.md`
+
 **Title format:** `As a <persona>, I want to <action>, so that <benefit>`
 
 Or if that feels forced for the context, use: `[Feature] <concise description>`
 
-**Full story body:**
+**Jira description body** (follow the company template structure):
 
 ```markdown
-## User Story
-**As a** [ops agent / pharmacist / pharmacy manager / patient / admin]
-**I want to** [specific action]
-**So that** [outcome / benefit]
+## Note: This is an AI generated document. Stakeholders are required to review the content before publishing the final version.
 
-## Context
-[1-3 sentences of background — why this matters, what's happening today without this feature]
+## Description
 
-## Acceptance Criteria
-Given [initial context], when [user action], then [expected result]:
+### Overview
+[As a [persona], I want to [action], so that [outcome].
 
+2-3 sentences of background — why this matters, what's happening today without this feature. Ground in the JTBD from Step 1.5.]
+
+### Acceptance Criteria
 - [ ] AC1: Given [context], when [action], then [system behavior]
 - [ ] AC2: Given [context], when [action], then [system behavior]
 - [ ] AC3: Given [context], when [action], then [system behavior]
 - [ ] AC4: (edge case) Given [context], when [action], then [system behavior]
 
-## Out of Scope
-- [explicit thing NOT included in this story]
-- [another explicit exclusion]
+### Technical Requirements
+- **Dependencies:** [other tickets or systems this depends on — or "None"]
+- **Estimated Story Points:** [use table below]
 
-## Technical Notes
-[Implementation hints for engineering based on codebase investigation — optional but helpful]
-[Any API endpoints, models, or components likely involved]
+### Additional Context
+[Out of scope items, implementation hints from codebase investigation, API endpoints or models likely involved. Remove section if empty.]
 
-## Dependencies
-[Other tickets or systems this depends on — or "None"]
-
-## Definition of Done
-- [ ] Acceptance criteria above are met
-- [ ] Unit tests cover the new behavior
-- [ ] No regression in existing [related workflow]
+---
+*This ticket was created using the automated roadmap ticket creation process.*
 ```
 
 **Story points estimate:**
@@ -153,7 +148,7 @@ If **Small** fails (estimate ≥ 8 points): offer to split the story. Apply Lawr
 8. Defer performance
 9. Spike (last resort — only if there's genuine technical unknowns)
 
-Reference: `~/brain/knowledge/domain/user-story-best-practices.md`
+Reference: `~/pm/brain/knowledge/domain/user-story-best-practices.md`
 
 ### Step 4.6: Epic Hypothesis (for new epics only)
 
@@ -186,7 +181,7 @@ If epic key provided: also call `mcp__atlassian__jira_link_to_epic`.
 
 Append to weekly activity log:
 ```bash
-echo "- Story created: <JIRA_KEY> — <title> ($(date +%Y-%m-%d))" >> ~/brain/knowledge/scratch/$(date +%G-W%V)-activity.md
+echo "- Story created: <JIRA_KEY> — <title> ($(date +%Y-%m-%d))" >> ~/pm/brain/knowledge/scratch/$(date +%G-W%V)-activity.md
 ```
 
-Save a copy to `~/brain/knowledge/features/<YYYY-MM-DD>-story-<slug>.md` for brain reference.
+Save a copy to `~/pm/brain/knowledge/features/<YYYY-MM-DD>-story-<slug>.md` for brain reference.

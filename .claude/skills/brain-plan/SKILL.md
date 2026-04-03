@@ -6,9 +6,9 @@ allowed-tools: Read, Glob, Grep, Bash, mcp__atlassian__jira_get_issue, mcp__atla
 ---
 
 ## Brain Context
-Read ~/brain/.claude/PREAMBLE.md now. Follow all directives within it.
-Read ~/brain/knowledge/domain/problem-framing.md — used in Step 2.5.
-Read ~/brain/knowledge/domain/opportunity-solution-tree.md — used in Step 3.5.
+Read ~/pm/brain/.claude/PREAMBLE.md now. Follow all directives within it.
+Read ~/pm/brain/knowledge/domain/problem-framing.md — used in Step 2.5.
+Read ~/pm/brain/knowledge/domain/opportunity-solution-tree.md — used in Step 3.5.
 - Current date: !`date +%Y-%m-%d`
 
 ## Instructions
@@ -32,7 +32,7 @@ Search the knowledge base for relevant existing context:
 
 ```bash
 # Search for related PRDs, decisions, features, and domain knowledge
-sqlite3 ~/brain/data/brain.db "
+sqlite3 ~/pm/brain/data/brain.db "
 SELECT category, title, file_path, summary
 FROM knowledge_items
 WHERE (title LIKE '%{term}%' OR tags LIKE '%{term}%' OR summary LIKE '%{term}%')
@@ -46,7 +46,7 @@ Read the top 3–5 matching files. Note any existing decisions, constraints, or 
 
 Also check stakeholders:
 ```bash
-sqlite3 ~/brain/data/brain.db "SELECT name, role, team, file_path FROM stakeholders;"
+sqlite3 ~/pm/brain/data/brain.db "SELECT name, role, team, file_path FROM stakeholders;"
 ```
 
 ### Step 2.5: Problem Framing Gate
@@ -91,7 +91,7 @@ Then ask: "Which of these opportunities are we targeting with this plan? Or are 
 
 This takes 2 minutes and prevents planning the wrong solution with perfect execution.
 
-Reference: `~/brain/knowledge/domain/opportunity-solution-tree.md`
+Reference: `~/pm/brain/knowledge/domain/opportunity-solution-tree.md`
 
 ### Step 5: Load technical context
 
@@ -157,10 +157,10 @@ Produce a structured plan in this format:
 
 ### Step 7: Write to knowledge base
 
-Write the plan to `~/brain/knowledge/features/{YYYY-MM-DD}-{slug}.md` and upsert into brain.db:
+Write the plan to `~/pm/brain/knowledge/features/{YYYY-MM-DD}-{slug}.md` and upsert into brain.db:
 
 ```bash
-sqlite3 ~/brain/data/brain.db "
+sqlite3 ~/pm/brain/data/brain.db "
 INSERT OR REPLACE INTO knowledge_items (file_path, category, title, summary, tags, created_at, updated_at, indexed_at)
 VALUES ('knowledge/features/{YYYY-MM-DD}-{slug}.md', 'features', '{Feature Name}', '{1-sentence summary}', '{tag1},{tag2},{tag3}', '{today}', '{today}', datetime('now'));
 "

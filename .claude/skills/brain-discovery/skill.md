@@ -6,10 +6,10 @@ allowed-tools: Read, Glob, Grep, Bash, Write, Task, mcp__atlassian__jira_get_iss
 ---
 
 ## Brain Context
-Read ~/brain/.claude/PREAMBLE.md now. Follow all directives within it.
-Read ~/brain/knowledge/domain/problem-framing.md — this is your Phase 1 guide.
-Read ~/brain/knowledge/domain/jobs-to-be-done.md — this is your Phase 2 guide.
-Read ~/brain/knowledge/domain/opportunity-solution-tree.md — this is your Phase 3 guide.
+Read ~/pm/brain/.claude/PREAMBLE.md now. Follow all directives within it.
+Read ~/pm/brain/knowledge/domain/problem-framing.md — this is your Phase 1 guide.
+Read ~/pm/brain/knowledge/domain/jobs-to-be-done.md — this is your Phase 2 guide.
+Read ~/pm/brain/knowledge/domain/opportunity-solution-tree.md — this is your Phase 3 guide.
 - Current date: !`date +%Y-%m-%d`
 
 ## Instructions
@@ -33,7 +33,7 @@ If no arguments: ask "What area or problem should we run discovery on? You can p
 ### Step 2: Load brain context
 
 ```bash
-sqlite3 ~/brain/data/brain.db "
+sqlite3 ~/pm/brain/data/brain.db "
 SELECT category, title, file_path, summary
 FROM knowledge_items
 WHERE (title LIKE '%{term}%' OR tags LIKE '%{term}%' OR summary LIKE '%{term}%')
@@ -178,7 +178,7 @@ We'll know this hypothesis is worth building if within [2–4 weeks] we observe:
 
 ### Step 7: Save the discovery artifact
 
-Write to `~/brain/knowledge/features/{YYYY-MM-DD}-discovery-{slug}.md`:
+Write to `~/pm/brain/knowledge/features/{YYYY-MM-DD}-discovery-{slug}.md`:
 
 ```markdown
 ---
@@ -219,7 +219,7 @@ jira_tickets: [{KEY if any}]
 
 Upsert into brain.db:
 ```bash
-sqlite3 ~/brain/data/brain.db "
+sqlite3 ~/pm/brain/data/brain.db "
 INSERT OR REPLACE INTO knowledge_items (file_path, category, title, summary, tags, created_at, updated_at, indexed_at)
 VALUES ('knowledge/features/{YYYY-MM-DD}-discovery-{slug}.md', 'features', 'Discovery: {topic}', '{1-sentence summary}', 'discovery,{slug}', '{today}', '{today}', datetime('now'));
 "

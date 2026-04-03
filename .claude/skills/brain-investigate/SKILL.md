@@ -6,7 +6,7 @@ allowed-tools: Read, Glob, Grep, Bash, mcp__atlassian__jira_get_issue, mcp__atla
 ---
 
 ## Brain Context
-Read ~/brain/.claude/PREAMBLE.md now. Follow all directives within it.
+Read ~/pm/brain/.claude/PREAMBLE.md now. Follow all directives within it.
 - Current date: !`date +%Y-%m-%d`
 - Current directory: !`pwd`
 
@@ -35,7 +35,7 @@ Search for prior knowledge on this topic:
 
 ```bash
 # Check for past incidents with similar symptoms
-sqlite3 ~/brain/data/brain.db "
+sqlite3 ~/pm/brain/data/brain.db "
 SELECT title, file_path, summary
 FROM knowledge_items
 WHERE category = 'oncall'
@@ -45,7 +45,7 @@ LIMIT 5;
 " 2>/dev/null
 
 # Check domain knowledge (SLA, service behavior)
-sqlite3 ~/brain/data/brain.db "
+sqlite3 ~/pm/brain/data/brain.db "
 SELECT title, file_path, summary
 FROM knowledge_items
 WHERE category IN ('domain', 'decisions')
@@ -58,7 +58,7 @@ Read the matching oncall files in full — they contain past root causes, mitiga
 
 ### Step 4: Load debug patterns
 
-Read `~/brain/.claude/skills/brain-investigate/references/debug-patterns.md` for Blinkhealth-specific patterns to watch for.
+Read `~/pm/brain/.claude/skills/brain-investigate/references/debug-patterns.md` for Blinkhealth-specific patterns to watch for.
 
 ### Step 5: Codebase investigation
 
@@ -126,12 +126,12 @@ assign the same task."}
 
 ### Step 7: Offer to write an incident note
 
-Ask: "Should I write this investigation to ~/brain/knowledge/oncall/ for future reference?"
+Ask: "Should I write this investigation to ~/pm/brain/knowledge/oncall/ for future reference?"
 
-If yes, write `~/brain/knowledge/oncall/{YYYY-MM-DD}-{slug}.md` and upsert into brain.db:
+If yes, write `~/pm/brain/knowledge/oncall/{YYYY-MM-DD}-{slug}.md` and upsert into brain.db:
 
 ```bash
-sqlite3 ~/brain/data/brain.db "
+sqlite3 ~/pm/brain/data/brain.db "
 INSERT OR REPLACE INTO knowledge_items (file_path, category, title, summary, tags, created_at, updated_at, indexed_at)
 VALUES ('knowledge/oncall/{YYYY-MM-DD}-{slug}.md', 'oncall', '{title}', '{1-sentence summary}', '{service},{error_type},{component}', '{today}', '{today}', datetime('now'));
 "

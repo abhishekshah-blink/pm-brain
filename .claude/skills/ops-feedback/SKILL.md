@@ -6,7 +6,7 @@ allowed-tools: Read, Glob, Grep, Bash, Write, mcp__atlassian__jira_create_issue,
 ---
 
 ## Brain Context
-Read ~/brain/.claude/PREAMBLE.md now. Follow all directives within it.
+Read ~/pm/brain/.claude/PREAMBLE.md now. Follow all directives within it.
 - Current date: !`date +%Y-%m-%d`
 - ISO week: !`date +%G-W%V`
 
@@ -53,7 +53,7 @@ Read 1-2 relevant files to understand the current implementation well enough to:
 
 Check if this feedback relates to existing knowledge:
 ```bash
-sqlite3 ~/brain/data/brain.db "
+sqlite3 ~/pm/brain/data/brain.db "
 SELECT title, category, file_path, summary
 FROM knowledge_items
 WHERE (title LIKE '%<term>%' OR tags LIKE '%<term>%' OR summary LIKE '%<term>%')
@@ -123,9 +123,9 @@ If confirmed: call `mcp__atlassian__jira_create_issue` with:
 
 Append to the weekly activity log:
 ```bash
-echo "- Ops feedback → Story: <JIRA_KEY> — <title> ($(date +%Y-%m-%d))" >> ~/brain/knowledge/scratch/$(date +%G-W%V)-activity.md
+echo "- Ops feedback → Story: <JIRA_KEY> — <title> ($(date +%Y-%m-%d))" >> ~/pm/brain/knowledge/scratch/$(date +%G-W%V)-activity.md
 ```
 
-Write the Slack feedback text + ticket link to `~/brain/knowledge/features/<YYYY-MM-DD>-ops-<slug>.md` for future reference.
+Write the Slack feedback text + ticket link to `~/pm/brain/knowledge/features/<YYYY-MM-DD>-ops-<slug>.md` for future reference.
 
 Report the Jira ticket key and URL.

@@ -10,7 +10,7 @@ import os
 import sys
 from datetime import date
 
-PENDING = os.path.expanduser("~/brain/knowledge/wins/pending.jsonl")
+PENDING = os.path.expanduser("~/pm/brain/knowledge/wins/pending.jsonl")
 INTERESTING_TRANSITIONS = {"done", "closed", "complete", "completed", "in review", "merged", "released"}
 
 

@@ -6,7 +6,7 @@ allowed-tools: Read, Glob, Grep, Bash, mcp__atlassian__jira_get_issue, Task
 ---
 
 ## Brain Context
-Read ~/brain/.claude/PREAMBLE.md now. Follow all directives within it.
+Read ~/pm/brain/.claude/PREAMBLE.md now. Follow all directives within it.
 - Current date: !`date +%Y-%m-%d`
 - Current directory: !`pwd`
 - Current branch: !`git branch --show-current 2>/dev/null || echo "not a git repo"`
@@ -50,7 +50,7 @@ If not found: note "No Jira ticket detected — skipping acceptance criteria che
 
 Check for any relevant decisions that apply to the changed code:
 ```bash
-sqlite3 ~/brain/data/brain.db "
+sqlite3 ~/pm/brain/data/brain.db "
 SELECT title, file_path, summary
 FROM knowledge_items
 WHERE category = 'decisions'
@@ -69,7 +69,7 @@ Read the full diff. Apply all checks below and score each finding with confidenc
 - Does the implementation actually fulfill the Jira ticket's acceptance criteria?
 - Are edge cases from the AC covered?
 
-#### Blink Checklist (load ~/brain/.claude/skills/brain-review/references/blink-checklist.md)
+#### Blink Checklist (load ~/pm/brain/.claude/skills/brain-review/references/blink-checklist.md)
 
 Apply every item in the checklist. Note which items pass and which fail.
 

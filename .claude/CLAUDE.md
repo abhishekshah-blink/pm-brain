@@ -1,6 +1,6 @@
 # Brain System — CLAUDE.md
 
-> Single source of truth for ~/brain/. All agents and skills read this file.
+> Single source of truth for ~/pm/brain/. All agents and skills read this file.
 
 ## Identity
 
@@ -13,7 +13,7 @@
 
 ## What This System Is
 
-~/brain/ is a Personal Knowledge Accelerator — a second brain that combines:
+~/pm/brain/ is a Personal Knowledge Accelerator — a second brain that combines:
 1. **Knowledge management** (PKA-style): raw inputs → structured markdown → SQLite index
 2. **PM + dev workflow skills** (gstack-style): slash commands that check the brain before any product or dev work
 
@@ -21,9 +21,9 @@ The result: every planning, discovery, PRD, story, review, ship, and investigate
 
 ## Knowledge Base
 
-- **Root:** ~/brain/knowledge/
-- **SQLite index:** ~/brain/data/brain.db
-- **Inbox (unprocessed):** ~/brain/inbox/
+- **Root:** ~/pm/brain/knowledge/
+- **SQLite index:** ~/pm/brain/data/brain.db
+- **Inbox (unprocessed):** ~/pm/brain/inbox/
 
 ### Taxonomy
 
@@ -93,6 +93,26 @@ stakeholders: []       # optional: [name]
 
 **Skills always check the brain before starting product or dev work.** They query SQLite for relevant context, then load only the matching markdown files — keeping context window usage efficient.
 
+## Engineering Skills (via blink-ai-tools)
+
+These skills are synced from `~/pm/blink-ai-tools/` into `~/.claude/commands/` on session start. Do not re-implement them in brain.
+
+| Skill | When to use |
+|---|---|
+| `/eng-workflow` | Any non-trivial feature implementation — 7-phase workflow with plan gate and SP-based depth selection |
+| `/ai-retro` | After a ticket is delivered — produces SP Evaluation Report with scope analysis and effort calibration |
+| `/eng-scorecard` | Score tickets from retro files → `output/baseline_scorecard.csv` |
+| `/pr-review` | After pushing a branch — creates pending GitHub draft review with inline comments |
+| `/jira-status-update` | Add a structured living status comment (phase checklist + PR link + evidence) to a Jira ticket |
+| `/generate-manual` | Auto-generate a user manual via journey-explorer → screenshot-capture → manual-writer pipeline |
+
+**Rule:** If a task is covered by a blink-ai-tools skill, use it. Don't duplicate it here.
+
+**Additional templates** (at `~/.claude/blink-ai-tools/report_templates/`, available after bootstrap):
+- `technical_design_document_template.md` — TRD with architecture, ERD, IAM, threat model, cost analysis
+- `test_plan_template.md` — QA test plan with scope, entry/exit criteria, risk matrix
+- `sprint_report_template.html` — alternate weekly status format (table-based with completion %)
+
 ## PM Frameworks Reference
 
 PM best practices are stored as domain knowledge and auto-surfaced by skills. Key files:
@@ -115,19 +135,19 @@ PM best practices are stored as domain knowledge and auto-surfaced by skills. Ke
 
 ```bash
 # Always use:
-sqlite3 ~/brain/data/brain.db "<query>"
+sqlite3 ~/pm/brain/data/brain.db "<query>"
 
 # Find knowledge items by topic:
-sqlite3 ~/brain/data/brain.db "SELECT title, file_path, summary FROM knowledge_items WHERE category IN ('prd','decisions','domain') AND (title LIKE '%<term>%' OR tags LIKE '%<term>%') LIMIT 10;"
+sqlite3 ~/pm/brain/data/brain.db "SELECT title, file_path, summary FROM knowledge_items WHERE category IN ('prd','decisions','domain') AND (title LIKE '%<term>%' OR tags LIKE '%<term>%') LIMIT 10;"
 
 # Find open Jira tickets for a feature:
-sqlite3 ~/brain/data/brain.db "SELECT ticket_key, summary, status FROM jira_tickets WHERE status != 'Done' AND (epic_key = '<key>' OR summary LIKE '%<term>%');"
+sqlite3 ~/pm/brain/data/brain.db "SELECT ticket_key, summary, status FROM jira_tickets WHERE status != 'Done' AND (epic_key = '<key>' OR summary LIKE '%<term>%');"
 
 # List all stakeholder files:
-sqlite3 ~/brain/data/brain.db "SELECT name, role, team, file_path FROM stakeholders;"
+sqlite3 ~/pm/brain/data/brain.db "SELECT name, role, team, file_path FROM stakeholders;"
 
 # Check what was indexed this week:
-sqlite3 ~/brain/data/brain.db "SELECT title, category FROM knowledge_items WHERE indexed_at >= date('now', '-7 days') ORDER BY indexed_at DESC;"
+sqlite3 ~/pm/brain/data/brain.db "SELECT title, category FROM knowledge_items WHERE indexed_at >= date('now', '-7 days') ORDER BY indexed_at DESC;"
 
 ```
 

@@ -6,23 +6,23 @@ allowed-tools: Read, Bash, Write, Glob, mcp__atlassian__jira_search, mcp__atlass
 ---
 
 ## Brain Context
-Read ~/brain/.claude/PREAMBLE.md now. Follow all directives within it.
+Read ~/pm/brain/.claude/PREAMBLE.md now. Follow all directives within it.
 - Current date: !`date +%Y-%m-%d`
 - ISO week: !`date +%G-W%V`
 
 ## Dynamic Context
 
 Weekly activity log (what was done this week):
-!`cat ~/brain/knowledge/scratch/$(date +%G-W%V)-activity.md 2>/dev/null || echo "(no activity log yet this week)"`
+!`cat ~/pm/brain/knowledge/scratch/$(date +%G-W%V)-activity.md 2>/dev/null || echo "(no activity log yet this week)"`
 
 New decisions captured this week:
-!`sqlite3 ~/brain/data/brain.db "SELECT title, file_path FROM knowledge_items WHERE category = 'decisions' AND indexed_at >= date('now', '-7 days');" 2>/dev/null`
+!`sqlite3 ~/pm/brain/data/brain.db "SELECT title, file_path FROM knowledge_items WHERE category = 'decisions' AND indexed_at >= date('now', '-7 days');" 2>/dev/null`
 
 ## Instructions
 
 You are running /brain-weekly-email. Every Friday you produce the VP status email using the Blinkhealth template. The email has 4 sections: decisions, blockers, what shipped (UX improvements this week), and what's coming next week.
 
-**Read the full template:** `~/brain/.claude/skills/brain-weekly-email/references/email-template.html`
+**Read the full template:** `~/pm/brain/.claude/skills/brain-weekly-email/references/email-template.html`
 
 ### Step 1: Pull this week's Jira data
 
@@ -77,18 +77,22 @@ From the in-progress/ready tickets:
 
 ### Step 6: Produce the filled email
 
-Fill in the HTML template from `references/email-template.html`, replacing all `[PLACEHOLDER]` values with real content.
+Read the company HTML template: `~/.claude/blink-ai-tools/report_templates/weekly_status_email_template.html`
+
+Fill in all `[PLACEHOLDER]` values with real content. Follow the template exactly — do not add, remove, or rename sections. Key fields to populate:
+- Section 3 completed tickets table: Overview, JIRA link, Comments, Assignee, Story Points, %AI (leave blank if unknown), Target End
+- Section 4 upcoming tickets table: Overview, JIRA link, Status, Assignee, Story Points, %AI (leave blank if unknown), Target End
 
 Save the filled email as:
-- Markdown summary: `~/brain/knowledge/retros/$(date +%G-W%V)-weekly-email.md`
-- HTML output: `~/brain/knowledge/retros/$(date +%G-W%V)-weekly-email.html`
+- Markdown summary: `~/pm/brain/knowledge/retros/$(date +%G-W%V)-weekly-email.md`
+- HTML output: `~/pm/brain/knowledge/retros/$(date +%G-W%V)-weekly-email.html`
 
 Also output the **plain text version** directly to the conversation so you can copy-paste it immediately.
 
 ### Step 7: Auto-log
 
 ```bash
-echo "- Weekly email drafted for VP ($(date +%Y-%m-%d))" >> ~/brain/knowledge/scratch/$(date +%G-W%V)-activity.md
+echo "- Weekly email drafted for VP ($(date +%Y-%m-%d))" >> ~/pm/brain/knowledge/scratch/$(date +%G-W%V)-activity.md
 ```
 
-Ask: "Ready to review. Copy the HTML from `~/brain/knowledge/retros/$(date +%G-W%V)-weekly-email.html` to send."
+Ask: "Ready to review. Copy the HTML from `~/pm/brain/knowledge/retros/$(date +%G-W%V)-weekly-email.html` to send."

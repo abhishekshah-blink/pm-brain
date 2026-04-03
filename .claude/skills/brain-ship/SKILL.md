@@ -6,7 +6,7 @@ allowed-tools: Read, Glob, Bash, Task, mcp__github__create_pull_request, mcp__at
 ---
 
 ## Brain Context
-Read ~/brain/.claude/PREAMBLE.md now. Follow all directives within it.
+Read ~/pm/brain/.claude/PREAMBLE.md now. Follow all directives within it.
 - Current date: !`date +%Y-%m-%d`
 - Current directory: !`pwd`
 - Current branch: !`git branch --show-current 2>/dev/null || echo "not a git repo"`
@@ -16,6 +16,8 @@ Read ~/brain/.claude/PREAMBLE.md now. Follow all directives within it.
 ## Instructions
 
 You are running /brain-ship. You will run the full shipping pipeline for the current branch. This has real side effects — it pushes code and creates a GitHub PR. Confirm before the push step if anything looks unexpected.
+
+> **Note:** For non-trivial feature work (story points ≥ 0.5, new features, architecture changes), prefer `/eng-workflow` instead — it includes a plan approval gate, structured phases, and E2E validation. Use `/brain-ship` for small fixes, config changes, and hotfixes where the plan gate isn't needed.
 
 **Order of operations:** tests → lint → review → commit → push → PR → Jira transition
 
@@ -58,7 +60,7 @@ Run the lint check. If lint fails:
 
 ### Step 5: Brain review (inline)
 
-Run /brain-review logic inline (do not spawn a separate skill). Load the diff and apply the Blink Checklist from `~/brain/.claude/skills/brain-review/references/blink-checklist.md`.
+Run /brain-review logic inline (do not spawn a separate skill). Load the diff and apply the Blink Checklist from `~/pm/brain/.claude/skills/brain-review/references/blink-checklist.md`.
 
 - If **Critical** issues found: stop and report them. Do not proceed to commit.
 - If **Important** issues found: list them and ask "There are Important-level review findings. Ship anyway or fix first?"
@@ -163,7 +165,7 @@ entry = {
     'pr_url': '{PR URL}',
     'branch': '{branch}',
 }
-pending = os.path.expanduser('~/brain/knowledge/wins/pending.jsonl')
+pending = os.path.expanduser('~/pm/brain/knowledge/wins/pending.jsonl')
 os.makedirs(os.path.dirname(pending), exist_ok=True)
 with open(pending, 'a') as f:
     f.write(json.dumps(entry) + '\n')

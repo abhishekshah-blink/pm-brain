@@ -2,30 +2,82 @@
 
 > A second brain for product managers who build — powered by Claude Code.
 
-Most PMs carry too much in their heads: what was decided last sprint, what ops reported on Slack, what the acceptance criteria were for that ticket three weeks ago. pm-brain captures all of it, organizes it automatically, and surfaces it the moment you need it — whether you're writing a PRD, shipping code, or compiling the Friday status email.
+Most PMs carry too much in their heads: what was decided last sprint, what ops reported on Slack, what the acceptance criteria were for that ticket three weeks ago. pm-brain captures all of it, organizes it automatically, and surfaces it the moment you need it — whether you're writing a BRD, shipping code, or compiling the Friday status email.
 
 It runs entirely inside [Claude Code](https://claude.ai/code). No new app. No extra subscription. Just slash commands you type, and agents that do the work.
+
+---
+
+## The ~/pm/ ecosystem
+
+pm-brain is one part of a broader AI workspace. All four repos live together under `~/pm/`:
+
+| Repo | What it does |
+|---|---|
+| **`brain/`** ← this repo | PM knowledge system — skills, agents, knowledge base, wins tracking |
+| **`blink-ai-tools/`** | Engineering workflow automation — SDLC skills, MCP server, Cursor rules, report templates |
+| **`blink-ai-agents/`** | Production AI backend service (Django + OpenAI SDK + LangGraph) for pharmacy workflows |
+| **`claude-code-best-practice/`** | Reference patterns — hooks, orchestration, skill writing best practices |
+
+At session start, `blink-ai-tools` auto-syncs its skills into `~/.claude/commands/` via a `SessionStart` hook, making both systems available in every Claude Code session. pm-brain's skills are separately symlinked into `~/.claude/skills/` via `setup.sh`.
 
 ---
 
 ## What it does
 
 **Builds a knowledge base from everything you encounter at work.**
-Jira tickets, Confluence pages, ops Slack messages, incident reports, meeting notes — organized into clean markdown files with a searchable database behind it. A filing system that files itself.
+Jira tickets, Confluence pages, ops Slack messages, incident reports, meeting notes — organized into markdown files with a searchable SQLite database behind them. A filing system that files itself.
 
-**Gives you 14 slash commands grounded in that context.**
-When you run `/brain-plan`, it doesn't just help you plan — it first reads your existing PRDs, pulls the relevant Jira tickets live, checks your past decisions, and *then* writes the plan. Every skill is grounded in what you actually know.
+**Gives you slash commands grounded in that context.**
+When you run `/brain-plan`, it first reads your existing PRDs, pulls the relevant Jira tickets live, checks your past decisions, and *then* writes the plan. Every skill is grounded in what you actually know.
+
+**Uses company-standard templates automatically.**
+BRDs, Jira ticket descriptions, and the weekly status email all follow company templates from `blink-ai-tools`, not custom formats. Output is always compatible with the TDLC standard.
 
 **And silently records everything you ship.**
-Every Jira transition, every GitHub PR, every bug triaged — captured automatically in the background, enriched by Claude overnight, ready for review season. When it's time for your performance review or promo case, the evidence is already there.
+Every Jira transition, every GitHub PR, every bug triaged — captured automatically in the background, enriched by Claude overnight, ready for review season.
+
+---
+
+## PM Skills
+
+| Skill | Trigger phrases | What it does |
+|---|---|---|
+| `/brain-discovery` | "run discovery on X", "frame the problem", "do discovery for WFM-1234" | Problem framing before building — JTBD analysis, OST, MITRE canvas |
+| `/brain-plan` | "plan a feature", "break down WFM-1234", "design X" | Feature planning with live brain context — queries brain.db + Jira + Confluence |
+| `/brain-prd` | "write a PRD", "one-pager for X", "product spec" | BRD/PRD using the company BRD template — adds problem statement gate and Working Backwards stress-test |
+| `/brain-user-story` | "write a user story", "create a ticket for X" | Jira story using the company roadmap ticket template — adds JTBD framing and INVEST validation |
+| `/brain-decision` | "log a decision", "we decided X", "document this tradeoff" | ADR-style decision logging into `knowledge/decisions/` |
+| `/ops-feedback` | "ops feedback", paste ops Slack text | Ops Slack → structured Jira story with codebase context |
+| `/ops-bug` | "ops bug", paste ops Slack bug report | Ops Slack → Jira bug ticket with severity assessment |
+| `/brain-weekly-email` | "write the weekly email", "Friday email", "draft VP status" | VP status email using the company HTML template — pulls Jira sprint data automatically |
+| `/brain-review` | "review my code", "check before commit" | Pre-commit review using project CLAUDE.md rules + Jira acceptance criteria |
+| `/brain-ship` | "ship this", "commit and push", "create a PR" | Quick ship pipeline — tests → lint → review → commit → push → PR → Jira transition |
+| `/brain-investigate` | "debug this", "root cause WFM-1234", "why is X failing" | Root cause analysis with prior incident context from brain.db |
+| `/brain-sync` | "sync Jira", "pull my tickets", "sync sprint", "sync WFM-1234" | Pull Jira/Confluence/GitHub into knowledge base via MCP |
+
+---
+
+## Engineering Skills (auto-synced from blink-ai-tools)
+
+These sync into `~/.claude/commands/` on every session start. Use them for engineering work — don't re-implement them in brain.
+
+| Skill | When to use |
+|---|---|
+| `/eng-workflow` | Any non-trivial feature — 7-phase workflow with plan approval gate and SP-based depth |
+| `/pr-review` | After pushing a branch — creates a pending GitHub draft review with inline comments |
+| `/ai-retro` | After a ticket is delivered — SP evaluation report and calibration |
+| `/jira-status-update` | Add a structured living status comment to a Jira ticket |
+| `/eng-scorecard` | Score tickets from retro files → `output/baseline_scorecard.csv` |
+| `/generate-manual` | Auto-generate a user manual via journey-explorer → screenshot-capture → manual-writer |
+
+> **brain-ship vs eng-workflow:** Use `/brain-ship` for small fixes and hotfixes. Use `/eng-workflow` for feature work with story points ≥ 0.5 — it includes a plan approval gate, structured phases, and E2E validation.
 
 ---
 
 ## Automatic wins tracking
 
 The hardest part of performance reviews is remembering what you did six months ago. pm-brain solves this without any extra effort.
-
-### How it works
 
 ```
 You ship code or close a ticket
@@ -37,112 +89,76 @@ You ship code or close a ticket
 │  → appends raw signal to wins/pending.jsonl │
 └─────────────────────────────────────────────┘
         │
-        ▼  (every night at 10:37pm)
+        ▼  (nightly)
 ┌─────────────────────────────────────────────┐
 │  Nightly cron enriches the queue            │
-│  Claude pulls Jira context, writes:         │
-│  • what you did                             │
-│  • why it mattered                          │
-│  • review-ready bullet                      │
-│  • resume bullet                            │
-│  • missing evidence flag                    │
+│  Claude pulls Jira context and writes:      │
+│  • what you did + why it mattered           │
+│  • review-ready bullet + resume bullet      │
+│  • SPM I pillar signal (delivery/impact/    │
+│    ambiguity/complexity)                    │
 │  → saves to knowledge/wins/                 │
 └─────────────────────────────────────────────┘
         │
-        ▼  (every Friday at 6:43pm)
+        ▼  (every Friday)
 ┌─────────────────────────────────────────────┐
 │  Weekly digest auto-generated               │
-│  Top wins, theme breakdown, evidence gaps   │
+│  Top wins, pillar breakdown, evidence gaps  │
 │  → saved to knowledge/wins/digests/         │
 └─────────────────────────────────────────────┘
 ```
 
-**What gets captured automatically:**
+**Captured automatically:**
 - Every GitHub PR you create or merge
 - Every Jira ticket you transition (In Review, Done, Closed)
-- Every Jira ticket created via `/ops-feedback` or `/ops-bug`
+- Every ticket created via `/ops-feedback` or `/ops-bug`
 - Every shipment via `/brain-ship`
 
-**For things that never touch Jira or GitHub** (a key conversation, a process you improved, a decision you drove): `/wins "what you did"` in under 30 seconds.
+**For things that never touch Jira or GitHub** — `/wins "what you did"` in 30 seconds.
 
-**When review season arrives:**
+**At review time:**
 ```
-/wins-digest quarterly    → full self-review draft, bullets by competency, manager talking points
+/wins-digest quarterly    → full self-review draft, bullets by competency
 /wins-digest promo        → promotion case narrative, strongest examples, gaps to close
 ```
 
 ---
 
-## The 14 skills
+## Three agents behind the scenes
 
-### Product work
+**Sorter** is the orchestrator. Drop any file in `inbox/` and Sorter reads it, classifies it, and routes it to the right folder. Confident (≥70%)? Precise routing. Unsure? `scratch/` and flagged. Cleans up after filing.
 
-| Skill | What it does |
-|---|---|
-| `/brain-discovery` | Frame a problem before jumping to solutions — customer discovery, JTBD, and opportunity mapping |
-| `/brain-plan` | Plan a feature end-to-end — loads existing PRDs, live Jira tickets, Confluence docs, and past decisions |
-| `/brain-prd` | Write a PRD or one-pager — concise one-pager for small features, full spec for major initiatives |
-| `/brain-user-story` | Turn a feature idea into a Jira story with acceptance criteria — creates the actual ticket |
-| `/brain-decision` | Log a decision with alternatives, rationale, tradeoffs, and a revisit trigger — fills `knowledge/decisions/` |
-| `/ops-feedback` | Paste a Slack message from ops — reads the codebase, checks prior work, creates a structured Jira story |
-| `/ops-bug` | Paste a bug report from ops — investigates the code path, assesses severity, creates a Jira bug ticket |
-| `/brain-weekly-email` | Compile the Friday VP status email — pulls Jira sprint data and formats your team's weekly update |
+**Keeper** is the librarian. Writes knowledge items — PRDs, synced tickets, incident notes, enriched wins. Adds structured metadata, indexes everything in brain.db, links related items.
 
-### Dev workflow
-
-| Skill | What it does |
-|---|---|
-| `/brain-review` | Code review before committing — checks project coding standards and the linked ticket's acceptance criteria |
-| `/brain-ship` | Full ship pipeline — tests → lint → review → commit → push → GitHub PR → Jira transition |
-| `/brain-investigate` | Root cause analysis — searches the codebase, checks past incidents, produces a hypothesis and proposed fix |
-| `/brain-sync` | Pull Jira and Confluence into your knowledge base — syncs your sprint, a specific ticket, or a page |
-
-### Wins tracking
-
-| Skill | What it does |
-|---|---|
-| `/wins` | Manually capture a win not auto-detected — accepts a raw note or a Jira key |
-| `/wins-digest` | Synthesize accumulated wins — pass `weekly`, `monthly`, `quarterly`, or `promo` as the scope |
+**Scout** connects to Jira, Confluence, and GitHub via MCP. Run `/brain-sync sprint` and Scout pulls your entire current sprint as searchable markdown. Skills call Scout automatically when they need live data.
 
 ---
 
-## How it works
+## The knowledge base
 
-### Three agents behind the scenes
-
-**Sorter** is the orchestrator. Drop any file in `~/brain/inbox/` and Sorter reads it, figures out what kind of document it is, and routes it to the right folder. Confident (≥70%)? Precise routing. Unsure? Puts it in `scratch/` and flags it. Cleans up the inbox after filing.
-
-**Keeper** is the librarian. Every time something needs to be written — a PRD, a synced ticket, an incident note, an enriched win — Keeper does the writing. Adds consistent metadata, indexes everything in the SQLite database, and links related items together.
-
-**Scout** connects to Jira, Confluence, and GitHub. Run `/brain-sync sprint` and Scout pulls your entire current sprint — all tickets, descriptions, acceptance criteria, comments — and saves them as searchable markdown files. Skills call Scout automatically when they need live data.
-
----
-
-### The knowledge base
-
-Everything lives in `~/brain/knowledge/` as plain markdown files:
+Everything lives in `knowledge/` as plain markdown files with structured frontmatter:
 
 ```
 knowledge/
-├── prd/            ← PRDs, one-pagers, acceptance criteria
-├── decisions/      ← Every decision made, with date and rationale
-├── features/       ← Feature briefs and plans
+├── prd/            ← BRDs, one-pagers, acceptance criteria
+├── decisions/      ← ADRs — every decision with date, rationale, revisit trigger
+├── features/       ← Feature briefs from discovery through shipped
 ├── stakeholders/   ← One file per person or team
-├── jira/           ← Live Jira ticket snapshots (synced by Scout)
-├── confluence/     ← Live Confluence page snapshots (synced by Scout)
-├── domain/         ← Domain knowledge and PM frameworks
+├── jira/           ← Live Jira ticket snapshots (auto-synced by Scout)
+├── confluence/     ← Live Confluence page snapshots (auto-synced by Scout)
+├── domain/         ← PM frameworks, Claude Code tips, domain knowledge
 ├── oncall/         ← Incident notes and runbooks
 ├── wins/           ← Auto-captured accomplishment records (enriched nightly)
 │   └── digests/    ← Weekly and quarterly synthesized summaries
-└── scratch/        ← Unclassified notes (Sorter will reclassify)
+└── scratch/        ← Unclassified notes (Sorter reclassifies on request)
 ```
 
-Every file has structured metadata:
+Every file has YAML frontmatter:
 
 ```yaml
 ---
-title: Feature Plan: Shift Summary View
-category: features
+title: BRD: Shift Summary View
+category: prd
 tags: [scheduling, wfm, v2]
 created: 2026-03-30
 updated: 2026-03-30
@@ -150,37 +166,57 @@ jira_tickets: [WFM-1234]
 ---
 ```
 
-The SQLite database at `data/brain.db` indexes all of these so skills can search across thousands of notes instantly. The database is a query layer — the markdown files are the source of truth, and they're all yours.
+The SQLite database at `data/brain.db` indexes all files so skills can search across thousands of notes instantly. The database is a query layer — the markdown files are the source of truth.
 
-> Your knowledge base is gitignored. It stays on your machine and is never published anywhere.
+> The knowledge base is gitignored. It stays on your machine.
 
 ---
 
-### Where each skill saves its output
+## Company template integration
 
-| Skill | Output |
+brain skills use company-standard templates from `blink-ai-tools` automatically (fetched at `~/.claude/blink-ai-tools/report_templates/` after bootstrap):
+
+| Skill | Template used |
 |---|---|
-| `/brain-discovery` | Conversation + optionally `knowledge/features/` |
-| `/brain-plan` | `knowledge/features/` + conversation |
-| `/brain-prd` | `knowledge/prd/` + optionally Confluence |
-| `/brain-decision` | `knowledge/decisions/YYYY-MM-DD-slug.md` |
-| `/brain-user-story` | Jira ticket (created) + `knowledge/features/` |
-| `/ops-feedback` | Jira ticket (created) + `knowledge/features/` |
-| `/ops-bug` | Jira ticket (created) + optionally `knowledge/oncall/` |
-| `/brain-review` | Conversation — confidence-scored issues grouped by severity |
-| `/brain-ship` | GitHub PR (created) + Jira status updated |
-| `/brain-investigate` | Conversation + optionally `knowledge/oncall/` |
-| `/brain-weekly-email` | Conversation — ready to copy and send |
-| `/brain-sync` | `knowledge/jira/` and `knowledge/confluence/` |
-| `/wins` | `knowledge/wins/YYYY-MM-DD-slug.md` |
-| `/wins-digest` | `knowledge/wins/digests/` + conversation |
+| `/brain-prd` | `brd_template.md` — adds problem statement gate, JTBD framing, Working Backwards stress-test on top |
+| `/brain-user-story` | `roadmap_ticket.md` — adds JTBD framing, INVEST check, epic hypothesis on top |
+| `/brain-weekly-email` | `weekly_status_email_template.html` — pulls Jira data and fills it automatically |
+
+Additional templates available (reference manually):
+- `technical_design_document_template.md` — TRD with architecture diagrams, IAM, threat model, cost analysis
+- `test_plan_template.md` — QA test plan with scope, entry/exit criteria, risk matrix
+
+---
+
+## Hooks
+
+Four hooks are wired in `~/.claude/settings.json`:
+
+| Event | Hook | What it does |
+|---|---|---|
+| `SessionStart` | `bootstrap_tools.sh` | Clones/updates blink-ai-tools and syncs its skills/agents/hooks into `~/.claude/` |
+| `PostToolUse` | `wins-hook.py` | Fires on Jira transitions and GitHub PR events → appends to `wins/pending.jsonl` |
+| `Stop` | `wins-hook.py` | Scans the session transcript for meaningful work → logs aggregated session entry |
+| `PreCompact` | `pre-compact-hook.py` | Before context compression → snapshots session state to `scratch/compact-log.jsonl` |
+
+---
+
+## Cron jobs
+
+Three background jobs run on schedule:
+
+| Schedule | Script | What it does |
+|---|---|---|
+| Daily 8:00am | `scripts/sync-cron.sh` | Pulls open sprint + recently updated Jira tickets into `knowledge/jira/` |
+| Daily 5:30pm | `scripts/wins-enrich-cron.sh` | Enriches `wins/pending.jsonl` → structured win files with SPM I pillar tags |
+| Fridays 4:30pm | `scripts/wins-digest-cron.sh` | Synthesizes the week's wins into `knowledge/wins/digests/YYYY-WW.md` |
 
 ---
 
 ## Prerequisites
 
 - [Claude Code](https://claude.ai/code) (CLI or desktop app)
-- [Atlassian MCP](https://github.com/sooperset/mcp-atlassian) — connects Claude to your Jira and Confluence
+- [Atlassian MCP](https://github.com/sooperset/mcp-atlassian) — connects Claude to Jira and Confluence
 - [GitHub MCP](https://github.com/github/github-mcp-server) — connects Claude to your GitHub org
 - `sqlite3` in your shell (`brew install sqlite` on macOS)
 
@@ -188,20 +224,21 @@ The SQLite database at `data/brain.db` indexes all of these so skills can search
 
 ## Setup
 
-**1. Clone the repo**
+**1. Clone into ~/pm/**
 ```bash
-git clone https://github.com/abhishekshah-blink/pm-brain ~/brain
+mkdir -p ~/pm
+git clone https://github.com/abhishekshah-blink/pm-brain ~/pm/brain
 ```
 
 **2. Tell it who you are**
 
-Edit `~/brain/.claude/CLAUDE.md` and update the identity section at the top:
+Edit `~/pm/brain/.claude/CLAUDE.md` and update the identity section:
 - Your name and role
-- Your Jira workspace URL (e.g. `yourcompany.atlassian.net`)
-- Your GitHub org
-- Your active projects and where they live on your machine
+- Jira workspace URL (e.g. `yourcompany.atlassian.net`)
+- GitHub org
+- Active projects and their paths on your machine
 
-**3. Configure your MCPs**
+**3. Configure MCPs**
 
 In `~/.claude/mcp.json`:
 ```json
@@ -221,60 +258,89 @@ In `~/.claude/mcp.json`:
 
 **4. Run setup**
 ```bash
-bash ~/brain/scripts/setup.sh
+bash ~/pm/brain/scripts/setup.sh
 ```
 
-Creates all knowledge folders, initializes the SQLite database, and symlinks all 14 skills into Claude Code so they appear as slash commands.
+Creates all knowledge folders, initializes brain.db, and symlinks skills into `~/.claude/skills/`.
 
-**5. Enable automatic wins tracking**
+**5. Wire the hooks**
 
-Add the PostToolUse hook to `~/.claude/settings.json`:
+Add to `~/.claude/settings.json`:
 ```json
 {
   "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [{ "type": "command", "command": "bash ~/pm/blink-ai-tools/.claude/hooks/bootstrap_tools.sh" }]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "mcp__atlassian__jira_transition_issue|mcp__atlassian__jira_create_issue|mcp__github__create_pull_request|mcp__github__merge_pull_request",
-        "hooks": [{ "type": "command", "command": "python3 ~/brain/scripts/wins-hook.py" }]
+        "hooks": [{ "type": "command", "command": "python3 ~/pm/brain/scripts/wins-hook.py" }]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [{ "type": "command", "command": "python3 ~/pm/brain/scripts/wins-hook.py" }]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [{ "type": "command", "command": "python3 ~/.claude/scripts/pre-compact-hook.py" }]
       }
     ]
   }
 }
 ```
 
-Install the cron jobs (daily Jira sync + nightly wins enrichment + weekly digest):
+**6. Install cron jobs**
 ```bash
 (crontab -l 2>/dev/null; cat <<'EOF'
-# Brain daily Jira sync — every morning at 6:53am
-53 6 * * * /bin/bash -l ~/brain/scripts/sync-cron.sh
-# Brain wins enrichment — nightly at 10:37pm
-37 22 * * * /bin/bash -l ~/brain/scripts/wins-enrich-cron.sh
-# Brain wins weekly digest — Fridays at 6:43pm
-43 18 * * 5 /bin/bash -l ~/brain/scripts/wins-digest-cron.sh
+# Brain daily Jira sync
+0 8 * * * /bin/zsh -l ~/pm/brain/scripts/sync-cron.sh
+# Brain wins enrichment
+30 17 * * * /bin/zsh -l ~/pm/brain/scripts/wins-enrich-cron.sh
+# Brain wins weekly digest
+30 16 * * 5 /bin/zsh -l ~/pm/brain/scripts/wins-digest-cron.sh
 EOF
 ) | crontab -
 ```
 
-**6. Add your weekly email template** *(optional)*
-
-If your team has a standard status email format, drop it as HTML at:
-`~/brain/.claude/skills/brain-weekly-email/references/email-template.html`
-
 **7. First run**
 ```bash
-/brain-sync sprint     # pull your current Jira sprint
-/brain-plan            # plan something with live context
+/brain-sync sprint     # pull your current Jira sprint into the knowledge base
+/brain-plan            # plan something — with live context
 ```
+
+---
+
+## What gets saved where
+
+| Skill | Output |
+|---|---|
+| `/brain-discovery` | Conversation + optionally `knowledge/features/` |
+| `/brain-plan` | `knowledge/features/` + conversation |
+| `/brain-prd` | `knowledge/prd/` + optionally Confluence |
+| `/brain-decision` | `knowledge/decisions/YYYY-MM-DD-slug.md` |
+| `/brain-user-story` | Jira ticket (created) + `knowledge/features/` |
+| `/ops-feedback` | Jira ticket (created) + `knowledge/features/` |
+| `/ops-bug` | Jira ticket (created) + optionally `knowledge/oncall/` |
+| `/brain-review` | Conversation — issues grouped by severity |
+| `/brain-ship` | GitHub PR + Jira transitioned to In Review |
+| `/brain-investigate` | Conversation + optionally `knowledge/oncall/` |
+| `/brain-weekly-email` | `knowledge/retros/YYYY-WW-weekly-email.html` + conversation |
+| `/brain-sync` | `knowledge/jira/` and `knowledge/confluence/` |
 
 ---
 
 ## Credits
 
-**[PKA (Personal Knowledge Assistance)](https://github.com/nir-sheep/pka)** by **Nir Sheep** — the pattern of building a second brain with AI agents: a filing inbox, specialist agents that classify and index, and a clean taxonomy of knowledge categories.
+**[PKA](https://github.com/nir-sheep/pka)** by Nir Sheep — the pattern of building a second brain with AI agents: a filing inbox, specialist agents that classify and index, and a clean taxonomy of knowledge categories.
 
-**[gstack](https://github.com/garrytan/gstack)** by **Garry Tan** (President & CEO of Y Combinator) — the pattern of writing slash-command skills as plain markdown files that Claude Code reads and executes. The PREAMBLE system, voice directives, completion protocol, and fix-first heuristic are all adapted from gstack.
+**[gstack](https://github.com/garrytan/gstack)** by Garry Tan — the pattern of slash-command skills as plain markdown files. The PREAMBLE system, voice directives, completion protocol, and fix-first heuristic are adapted from gstack.
 
-What pm-brain adds on top: **MCP-native live data** (Scout pulls Jira and Confluence directly instead of manual file drops) and **automatic wins tracking** (hooks + nightly cron so your accomplishment record builds itself).
+**[blink-ai-tools](https://github.com/blinkhealth/blink-ai-tools)** — company SDLC automation repo providing the engineering skills (`/eng-workflow`, `/pr-review`, `/ai-retro`) and standard document templates (BRD, roadmap ticket, weekly email HTML) that brain skills use.
 
 ---
 
