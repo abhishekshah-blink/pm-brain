@@ -101,11 +101,11 @@ The system grows from actual usage. Skills you add this month get picked up by S
 
 ## Under the hood
 
-Everything is stored as plain markdown files on your machine — never in the cloud. A SQLite index sits alongside the files so skills can search across thousands of notes instantly without loading everything into context.
+Everything is stored as plain markdown files on your machine — never in the cloud. A SQLite database sits alongside the files as a query layer: every knowledge item, Jira ticket, Confluence page, stakeholder, and win is indexed with metadata. When you run a skill, it queries the database first to find what's relevant, then reads only those files — keeping responses fast and focused even as the knowledge base grows to thousands of entries. The markdown files are the source of truth; the database is just how skills find things quickly.
 
 Three agents run silently in the background:
 
-**Sorter** is the inbox processor. Drop any file — meeting notes, a Confluence export, a Slack thread — and Sorter classifies it and routes it to the right folder.
+**Sorter** is the inbox processor. Drop any file into `inbox/` — meeting notes, a Confluence export, a Slack thread, a copied decision from a call — and Sorter reads it, determines what it is, and files it into the right category: PRD, decision, stakeholder note, incident, domain knowledge. If it's confident, it routes precisely. If it's unsure, it places the file in `scratch/` and flags it for review. Nothing gets lost; nothing requires manual filing.
 
 **Keeper** is the librarian. Writes and indexes knowledge items, links related files, and maintains the metadata that makes search work.
 
