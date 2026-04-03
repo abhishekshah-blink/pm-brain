@@ -40,6 +40,7 @@ Every Jira transition, every GitHub PR, every bug triaged — captured automatic
 | `/brain-ship` | "ship this", "commit and push", "create a PR" | Quick ship pipeline — tests → lint → review → commit → push → PR → Jira transition |
 | `/brain-investigate` | "debug this", "root cause WFM-1234", "why is X failing" | Root cause analysis with prior incident context from brain.db |
 | `/brain-sync` | "sync Jira", "pull my tickets", "sync sprint", "sync WFM-1234" | Pull Jira/Confluence/GitHub into knowledge base via MCP |
+| `/skill-scout` | "what should be a skill", "scan my sessions", "find repeatable processes" | Surfaces repeatable processes from past sessions — auto-runs Mondays, drafts candidates into real skills |
 
 ---
 
@@ -201,6 +202,7 @@ Three background jobs run on schedule:
 | Daily 8:00am | `scripts/sync-cron.sh` | Pulls open sprint + recently updated Jira tickets into `knowledge/jira/` |
 | Daily 5:30pm | `scripts/wins-enrich-cron.sh` | Enriches `wins/pending.jsonl` → structured win files with SPM I pillar tags |
 | Fridays 4:30pm | `scripts/wins-digest-cron.sh` | Synthesizes the week's wins into `knowledge/wins/digests/YYYY-WW.md` |
+| Mondays 9:00am | `scripts/skill-scout-cron.sh` | Scans last week's sessions → `knowledge/scratch/skill-suggestions-YYYY-WW.md` |
 
 ---
 

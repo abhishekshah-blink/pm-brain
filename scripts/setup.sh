@@ -3,7 +3,7 @@
 # Idempotent setup: creates directories, initializes SQLite schema, symlinks skills into ~/.claude/skills/
 set -euo pipefail
 
-BRAIN_DIR="${BRAIN_DIR:-$HOME/brain}"
+BRAIN_DIR="${BRAIN_DIR:-$HOME/pm/brain}"
 CLAUDE_SKILLS_DIR="$HOME/.claude/skills"
 # Must match folders under $BRAIN_DIR/.claude/skills/ (names Cursor / Claude Code discover via ~/.claude/skills symlinks)
 SKILLS=(
@@ -22,6 +22,7 @@ SKILLS=(
   "wins-enricher"
   "wins-digest"
   "brain-decision"
+  "skill-scout"
 )
 
 echo "==> Setting up ~/pm/brain/ system"
@@ -40,6 +41,7 @@ mkdir -p \
   "$BRAIN_DIR"/.claude/skills/brain-sync \
   "$BRAIN_DIR"/.claude/skills/brain-review/references \
   "$BRAIN_DIR"/.claude/skills/brain-investigate/references \
+  "$BRAIN_DIR"/.claude/skills/skill-scout \
   "$CLAUDE_SKILLS_DIR"
 echo "    Done."
 

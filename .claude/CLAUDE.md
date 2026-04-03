@@ -90,6 +90,7 @@ stakeholders: []       # optional: [name]
 | `/brain-decision` | "log a decision", "we decided X", "document this tradeoff", "record the rationale" — captures decision, alternatives, rationale, tradeoffs, revisit trigger |
 | `/wins` | "log a win", "capture this", "add a win", or pass a Jira key — manual capture for work not auto-detected by hooks |
 | `/wins-digest` | "review my wins", "prep for review", "quarterly digest", "promo case", "monthly summary" — accepts scope: weekly/monthly/quarterly/promo |
+| `/skill-scout` | "what should be a skill", "scan my sessions", "find repeatable processes", "what am I doing manually that should be automated" — reads this week's auto-generated report or scans fresh; can draft a candidate into a real skill |
 
 **Skills always check the brain before starting product or dev work.** They query SQLite for relevant context, then load only the matching markdown files — keeping context window usage efficient.
 
